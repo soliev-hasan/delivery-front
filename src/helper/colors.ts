@@ -1,0 +1,17 @@
+export default {
+  black: '#1a1917',
+  gray: '#adb4b5',
+  grayLight: '#e8eaea',
+  grayDark: '#838687',
+  blue: '#7396ba',
+  blueDark: '#743AE7',
+  white: '#ffffff',
+  gold: '#f2c40c',
+  red: '#D40007',
+  purple: '#743AE7',
+  purpleLight: '#B406E5',
+  green: 'green',
+  yellow: '#FFF000',
+  yellowLight: '#F8E7AD',
+  main: 'FE8C00',
+};
