@@ -4,9 +4,7 @@ import SingUp from '../pages/sign-up/sign-up.component';
 const Stack = createNativeStackNavigator();
 const SingUpNavigation = () => {
   return (
-    <Stack.Navigator
-      initialRouteName={'SplashScreen'}
-      screenOptions={{gestureEnabled: false}}>
+    <Stack.Navigator screenOptions={{gestureEnabled: false}}>
       <Stack.Screen
         name="SignUp"
         component={SingUp}
