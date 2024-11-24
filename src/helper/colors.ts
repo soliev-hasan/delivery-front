@@ -1,6 +1,6 @@
 export default {
   black: '#1a1917',
-  gray: '#adb4b5',
+  gray: '#D6D6D6',
   grayLight: '#e8eaea',
   grayDark: '#838687',
   blue: '#7396ba',
@@ -13,5 +13,5 @@ export default {
   green: 'green',
   yellow: '#FFF000',
   yellowLight: '#F8E7AD',
-  main: 'FE8C00',
+  main: '#FE8C00',
 };
