@@ -10,7 +10,16 @@ export default StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
   },
+
   text: {
     color: colors.white,
+  },
+  disabled: {
+    backgroundColor: colors.gray,
+    height: 50,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
 });
