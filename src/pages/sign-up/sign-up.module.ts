@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import colors from '../../helper/colors';
 
 export default StyleSheet.create({
@@ -35,4 +35,19 @@ export default StyleSheet.create({
     height: 0.9,
     width: 100,
   },
+  googleAuthContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  googleAuthIcon: {
+    width: 45,
+    height: 45,
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: colors.gray,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
