@@ -49,10 +49,16 @@ const Otp = ({navigation}: RootNavigationProps<'Otp'>) => {
         phone: `+992${phone}`,
         code: password,
       });
-      console.log(result.status);
 
       if (result.status == 200) {
-        await AsyncStorage.setItem('refreshToken', result.data.refreshToken);
+        let data = await sendRequest(
+          'get',
+          `auth/refresh-token?refreshToken=${result.data.refreshToken}`,
+        );
+
+        await AsyncStorage.setItem('refreshToken', data.data.refreshToken);
+        await AsyncStorage.setItem('token', data.data.token);
+
         navigation.navigate('Main');
       }
     } catch (error) {
