@@ -12,6 +12,7 @@ export default StyleSheet.create({
   },
   title: {
     fontSize: 30,
+    color: colors.black,
   },
   desc: {
     color: colors.gray,

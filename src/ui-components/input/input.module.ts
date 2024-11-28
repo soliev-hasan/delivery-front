@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import colors from '../../helper/colors';
 
 export default StyleSheet.create({
@@ -12,15 +12,18 @@ export default StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 8,
+    height: 40,
+
     width: '100%',
   },
   input: {
     fontSize: 16,
     color: 'black',
-    height: 20,
     backgroundColor: 'transparent',
     borderColor: colors.gray,
     flex: 1,
+    height: 40,
+    marginTop: Platform.OS === 'android' && (5 as any),
   },
   eyeIcon: {
     marginLeft: 12,
