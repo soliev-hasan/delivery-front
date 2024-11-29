@@ -16,7 +16,7 @@ export default StyleSheet.create({
   },
   input: {
     fontSize: 16,
-    color: 'black',
+    color: colors.grayDark,
     height: 20,
     backgroundColor: 'transparent',
     borderColor: colors.gray,

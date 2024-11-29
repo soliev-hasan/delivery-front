@@ -38,7 +38,8 @@ export default StyleSheet.create({
   googleAuthContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 15
   },
   googleAuthIcon: {
     width: 45,
