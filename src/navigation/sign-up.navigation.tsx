@@ -4,6 +4,7 @@ import SingUp from '../pages/sign-up/sign-up.component';
 import Otp from '../pages/OTP/otp.component';
 import {ScreensParams} from './navigation.types';
 import Main from '../pages/main/main.component';
+import BottomTabNavigation from './bottom-tab.navigation';
 const Stack = createNativeStackNavigator<ScreensParams>();
 const SingUpNavigation = () => {
   return (
@@ -19,6 +20,11 @@ const SingUpNavigation = () => {
       <Stack.Screen
         name="Main"
         component={Main}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="BottomTab"
+        component={BottomTabNavigation}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

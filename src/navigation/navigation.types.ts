@@ -5,6 +5,10 @@ export type ScreensParams = {
   Otp: undefined;
   SignUp: undefined;
   Main: undefined;
+  BottomTab: undefined;
+  Search: undefined;
+  Profile: undefined;
+  Cart: undefined;
 };
 
 export type RootRouteProps<RouteName extends keyof ScreensParams> = RouteProp<

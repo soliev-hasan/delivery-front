@@ -59,7 +59,7 @@ const Otp = ({navigation}: RootNavigationProps<'Otp'>) => {
         await AsyncStorage.setItem('refreshToken', data.data.refreshToken);
         await AsyncStorage.setItem('token', data.data.token);
 
-        navigation.navigate('Main');
+        navigation.navigate('BottomTab');
       }
     } catch (error) {
       Toast.show({

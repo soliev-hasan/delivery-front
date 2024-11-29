@@ -4,14 +4,20 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {ScreensParams} from './navigation.types';
 import SingUp from '../pages/sign-up/sign-up.component';
 import Main from '../pages/main/main.component';
+import BottomTabNavigation from './bottom-tab.navigation';
 
 const MainNavigation = () => {
   const Stack = createNativeStackNavigator<ScreensParams>();
 
   return (
     <Stack.Navigator
-      initialRouteName="Main"
+      initialRouteName="BottomTab"
       screenOptions={{gestureEnabled: false}}>
+      <Stack.Screen
+        name="BottomTab"
+        component={BottomTabNavigation}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="Main"
         component={Main}

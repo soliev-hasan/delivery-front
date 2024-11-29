@@ -7,7 +7,7 @@ import useAuth from './src/hooks/useAuth';
 import AuthContext from './src/contexts/AuthContext';
 import {AlertNotificationRoot} from 'react-native-alert-notification';
 import MainNavigation from './src/navigation/main.navigation';
-import {ActivityIndicator} from 'react-native';
+import {ActivityIndicator, StatusBar} from 'react-native';
 import colors from './src/helper/colors';
 
 function App() {

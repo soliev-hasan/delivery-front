@@ -9,7 +9,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   cell: {
-    backgroundColor: Platform.OS === 'android' ? 'black' : '',
+    backgroundColor: 'transparent',
     width: 75,
     height: 72,
     borderRadius: 14,
@@ -29,6 +29,7 @@ export default StyleSheet.create({
   },
   title: {
     fontSize: 30,
+    color: colors.black,
   },
   desc: {
     color: colors.grayDark,
