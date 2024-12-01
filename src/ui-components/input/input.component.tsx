@@ -9,7 +9,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import {Eye, EyeOff, Search} from 'lucide-react-native';
-import styles from './input.module';
+import styles from './input.style';
 
 export const Input = ({
   wrapperStyle,
