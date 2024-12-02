@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator<ScreensParams>();
 const SingUpNavigation = () => {
   return (
     <Stack.Navigator
-      initialRouteName="BottomTab"
+      initialRouteName="SignUp"
       screenOptions={{gestureEnabled: false}}>
       <Stack.Screen
         name="SignUp"

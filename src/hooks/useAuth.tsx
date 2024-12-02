@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useEffect, useState} from 'react';
+import {UserType} from '../types/user.type';
 
 const useAuth = () => {
   const [token, setToken] = useState<string>('');
@@ -8,6 +9,7 @@ const useAuth = () => {
   const [phone, setPhone] = useState<string>('');
   const [address, setAddress] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<UserType>();
 
   async function fetch() {
     let token = await AsyncStorage.getItem('token');
@@ -33,6 +35,10 @@ const useAuth = () => {
     address,
     setAddress,
     isLoading,
+    user,
+    setUser,
+    refreshToken,
+    setRefreshToken,
   };
 };
 

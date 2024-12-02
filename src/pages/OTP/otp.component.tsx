@@ -16,7 +16,7 @@ import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RootNavigationProps} from '../../navigation/navigation.types';
 const Otp = ({navigation}: RootNavigationProps<'Otp'>) => {
-  const {phone} = useContext(AuthContext);
+  const {phone, setToken} = useContext(AuthContext);
   const {sendRequest, loading, error, data} = useApiRequest();
   const [password, setPassword] = useState('');
 
@@ -55,7 +55,7 @@ const Otp = ({navigation}: RootNavigationProps<'Otp'>) => {
           'get',
           `auth/refresh-token?refreshToken=${result.data.refreshToken}`,
         );
-
+        setToken(data.data.token);
         await AsyncStorage.setItem('refreshToken', data.data.refreshToken);
         await AsyncStorage.setItem('token', data.data.token);
 

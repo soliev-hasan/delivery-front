@@ -25,10 +25,10 @@ const BottomTabNavigation = () => {
       screenOptions={{
         tabBarActiveTintColor: colors.white,
         tabBarStyle: {
-          backgroundColor: colors.white,
+          backgroundColor: '#FFFFFF',
           borderTopWidth: 0,
-          borderTopRightRadius: 16,
-          borderTopLeftRadius: 16,
+          borderTopRightRadius: 30,
+          borderTopLeftRadius: 30,
           height: 100,
         },
       }}>

@@ -9,6 +9,15 @@ const AuthContext = createContext({
   setPhone: noop,
   address: [],
   setAddress: {},
+  user: {
+    name: '',
+    surname: '',
+    photoUri: '',
+    email: '',
+  },
+  setUser: noop,
+  refreshToken: '',
+  setRefreshToken: noop,
 });
 
 export default AuthContext;
