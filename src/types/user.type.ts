@@ -7,4 +7,5 @@ export type UserType = {
   photoUri: string;
   surname?: string;
   updatedAt: string;
+  phone?: string;
 };

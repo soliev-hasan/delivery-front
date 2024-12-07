@@ -14,10 +14,22 @@ const AuthContext = createContext({
     surname: '',
     photoUri: '',
     email: '',
+    phone: '',
   },
-  setUser: noop,
+  setUser: {
+    name: '',
+    surname: '',
+    email: '',
+    phone: '',
+    __v: '',
+    _id: '',
+    createdAt: '',
+    photoUri: '',
+    updatedAt: '',
+  },
   refreshToken: '',
   setRefreshToken: noop,
+  logout: noop,
 });
 
 export default AuthContext;

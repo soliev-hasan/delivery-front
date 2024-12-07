@@ -5,6 +5,7 @@ import Otp from '../pages/OTP/otp.component';
 import {ScreensParams} from './navigation.types';
 import Main from '../pages/main/main.component';
 import BottomTabNavigation from './bottom-tab.navigation';
+import EditProfile from '../pages/profile/editProfile.component';
 const Stack = createNativeStackNavigator<ScreensParams>();
 const SingUpNavigation = () => {
   return (
@@ -20,6 +21,11 @@ const SingUpNavigation = () => {
       <Stack.Screen
         name="Main"
         component={Main}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
         options={{headerShown: false}}
       />
       <Stack.Screen

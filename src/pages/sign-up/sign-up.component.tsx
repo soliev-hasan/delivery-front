@@ -19,7 +19,8 @@ const SingUp = ({navigation}: RootNavigationProps<'SignUp'>) => {
   const webClientId =
     '147215434915-99vsopuod3ek3hsl99jee5a9b1q9biil.apps.googleusercontent.com';
 
-  const {phone, setPhone, setToken, setRefreshToken} = useContext(AuthContext);
+  const {phone, setPhone, setToken, setRefreshToken, setUser} =
+    useContext(AuthContext);
   const {sendRequest, loading, error, data} = useApiRequest();
   async function sendOtp() {
     try {
@@ -63,13 +64,18 @@ const SingUp = ({navigation}: RootNavigationProps<'SignUp'>) => {
       await AsyncStorage.setItem('token', data.data.token);
       setToken(data.data.token);
       setRefreshToken(data.data.refreshToken);
+      setUser(data.data.user);
       if (data.status === 200) {
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
           title: 'Success',
           textBody: 'Вход успешно выполнен',
         });
-        navigation.navigate('BottomTab');
+        if (data.data.userExist === false) {
+          navigation.navigate('EditProfile', {newUser: true});
+        } else {
+          navigation.navigate('BottomTab');
+        }
       } else {
         Toast.show({
           type: ALERT_TYPE.DANGER,

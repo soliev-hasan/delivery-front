@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import colors from '../../helper/colors';
 
 export default StyleSheet.create({
@@ -38,7 +38,7 @@ export default StyleSheet.create({
     width: '100%',
     height: 2,
     backgroundColor: colors.grayLight,
-    marginTop: 22
+    marginTop: 22,
   },
   iconContainer: {
     width: 40,
@@ -47,7 +47,7 @@ export default StyleSheet.create({
     backgroundColor: colors.grayLight2,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   iconInfo: {
     flexDirection: 'row',
@@ -57,16 +57,16 @@ export default StyleSheet.create({
   iconName: {
     fontSize: 18,
     color: colors.black,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   iconRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: 10
+    marginVertical: 10,
   },
   optionsContainer: {
-    marginVertical: 15
+    marginVertical: 15,
   },
   exitBtn: {
     flexDirection: 'row',
@@ -79,11 +79,16 @@ export default StyleSheet.create({
     borderRadius: 50,
     height: 75,
     gap: 10,
-    marginBottom: 30
+    marginBottom: 30,
   },
   exitText: {
     fontSize: 18,
     color: colors.redShade,
     fontWeight: 'bold',
+  },
+  user: {
+    padding: 20,
+    backgroundColor: colors.grayLight2,
+    borderRadius: 90,
   },
 });

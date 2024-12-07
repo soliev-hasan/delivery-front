@@ -1,16 +1,16 @@
-import { useState, useCallback, useContext } from 'react';
+import {useState, useCallback, useContext} from 'react';
 import axios from 'axios';
-import { DEVELOP_URL, port } from '../helper/helper';
+import {DEVELOP_URL, port} from '../helper/helper';
 import AuthContext from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const BASE_URL = `${DEVELOP_URL}/api/`;
+const BASE_URL = `${DEVELOP_URL}:${port}/api/`;
 
 export const useApiRequest = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | unknown>(null);
   const [data, setData] = useState(null);
-  const { token, setToken, setRefreshToken, refreshToken } =
+  const {token, setToken, setRefreshToken, refreshToken} =
     useContext(AuthContext);
 
   const sendRequest = useCallback(
@@ -28,12 +28,13 @@ export const useApiRequest = () => {
         let response;
 
         if (method === 'get') {
-          response = await axios.get(url, { headers, params: requestData });
+          response = await axios.get(url, {headers, params: requestData});
         } else if (method === 'post') {
-          response = await axios.post(url, requestData, { headers });
+          response = await axios.post(url, requestData, {headers});
         } else if (method === 'put') {
-          (headers as Record<string, string>)['Content-Type'] = 'multipart/form-data';
-          response = await axios.put(url, requestData, { headers });
+          (headers as Record<string, string>)['Content-Type'] =
+            'multipart/form-data';
+          response = await axios.put(url, requestData, {headers});
         } else {
           throw new Error('Unsupported request method');
         }
@@ -63,5 +64,5 @@ export const useApiRequest = () => {
     [token],
   );
 
-  return { sendRequest, loading, error, data };
+  return {sendRequest, loading, error, data};
 };

@@ -10,6 +10,7 @@ import categoriesSelectors from '../../store/categories/selectors';
 import styles from './main.style';
 import colors from '../../helper/colors';
 import {Text} from 'react-native-svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Main = () => {
   const {sendRequest} = useApiRequest();
   const {setUser, user, token, refreshToken} = useContext(AuthContext);

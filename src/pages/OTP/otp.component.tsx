@@ -59,7 +59,11 @@ const Otp = ({navigation}: RootNavigationProps<'Otp'>) => {
         await AsyncStorage.setItem('refreshToken', data.data.refreshToken);
         await AsyncStorage.setItem('token', data.data.token);
 
-        navigation.navigate('BottomTab');
+        if (result.data.userExist === false) {
+          navigation.navigate('EditProfile', {newUser: true});
+        } else {
+          navigation.navigate('BottomTab');
+        }
       }
     } catch (error) {
       Toast.show({

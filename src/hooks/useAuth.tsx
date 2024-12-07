@@ -9,8 +9,14 @@ const useAuth = () => {
   const [phone, setPhone] = useState<string>('');
   const [address, setAddress] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState<UserType>();
+  const [user, setUser] = useState<UserType | null>();
 
+  async function logout() {
+    await AsyncStorage.clear();
+    setPhone('');
+    setUser(null);
+    setToken('');
+  }
   async function fetch() {
     let token = await AsyncStorage.getItem('token');
     let refreshToken = await AsyncStorage.getItem('refreshToken');
@@ -39,6 +45,7 @@ const useAuth = () => {
     setUser,
     refreshToken,
     setRefreshToken,
+    logout,
   };
 };
 

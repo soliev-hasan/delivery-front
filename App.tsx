@@ -9,6 +9,7 @@ import {AlertNotificationRoot} from 'react-native-alert-notification';
 import MainNavigation from './src/navigation/main.navigation';
 import {ActivityIndicator, StatusBar} from 'react-native';
 import colors from './src/helper/colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function App() {
   const {
@@ -23,8 +24,8 @@ function App() {
     setUser,
     refreshToken,
     setRefreshToken,
+    logout,
   } = useAuth();
-
   return (
     <AuthContext.Provider
       value={{
@@ -38,6 +39,7 @@ function App() {
         setUser,
         refreshToken,
         setRefreshToken,
+        logout,
       }}>
       <AlertNotificationRoot>
         <Provider store={store}>

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import colors from '../../helper/colors';
 
 export default StyleSheet.create({
@@ -14,8 +14,6 @@ export default StyleSheet.create({
   },
   imageContainer: {
     position: 'relative',
-    width: 125,
-    height: 125,
   },
   cameraIcon: {
     position: 'absolute',
@@ -30,14 +28,19 @@ export default StyleSheet.create({
   },
   editForm: {
     marginTop: 50,
-    gap: 25
+    gap: 25,
   },
   inputRow: {
-    gap: 12
+    gap: 12,
   },
   inputLabel: {
     fontSize: 18,
     color: colors.black,
-    fontWeight: '500'
-  }
+    fontWeight: '500',
+  },
+  user: {
+    padding: 20,
+    backgroundColor: colors.grayLight2,
+    borderRadius: 90,
+  },
 });
