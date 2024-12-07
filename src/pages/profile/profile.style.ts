@@ -14,13 +14,11 @@ export default StyleSheet.create({
   },
   imageContainer: {
     position: 'relative',
-    width: 125,
-    height: 125,
   },
   cameraIcon: {
     position: 'absolute',
     bottom: -17,
-    right: -32,
+    right: -23,
     zIndex: 2,
   },
   profileImage: {

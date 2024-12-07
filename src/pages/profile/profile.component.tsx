@@ -15,19 +15,25 @@ import {ChevronRight, LogOut} from 'lucide-react-native';
 import colors from '../../helper/colors';
 import AuthContext from '../../contexts/AuthContext';
 import FastImage from 'react-native-fast-image';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProps } from '../../navigation/navigation.types';
+import { DEVELOP_URL } from '../../helper/helper';
 
-const Profile = () => {
+  const Profile = ({navigation}: RootNavigationProps<'Profile'>) => {
   const {user} = useContext(AuthContext);
 
   const options = [
-    {id: 1, name: 'Настройки', icon: SVGSettings},
-    {id: 2, name: 'Профиль', icon: SVGSettings},
-    {id: 3, name: 'Помощь', icon: SVGSettings},
-    {id: 4, name: 'О нас', icon: SVGSettings},
-    {id: 5, name: 'Контакты', icon: SVGSettings},
-    {id: 6, name: 'Выход', icon: SVGSettings},
+    {id: 1, name: 'Настройки', icon: SVGSettings, onPress: () => navigation.navigate('EditProfile')},
+    {id: 2, name: 'Профиль', icon: SVGSettings, onPress: () => console.log('Профиль')},
+    {id: 3, name: 'Помощь', icon: SVGSettings, onPress: () => console.log('')},
+    {id: 4, name: 'О нас', icon: SVGSettings, onPress: () => console.log('')},
+    {id: 5, name: 'Контакты', icon: SVGSettings, onPress: () => console.log('')},
+    {id: 6, name: 'Выход', icon: SVGSettings, onPress: () => console.log('')},
   ];
+  const BASE_URL = `${DEVELOP_URL}/api/`;
+  const profilePhoto = `${BASE_URL}${user.photoUri}`.replace(/\\/g, '/');
 
+  
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -39,15 +45,15 @@ const Profile = () => {
           <View style={styles.imageContainer}>
             <FastImage
               source={{
-                uri: user && user.photoUri,
+                uri: user && profilePhoto,
                 priority: FastImage.priority.normal,
               }}
               resizeMode={FastImage.resizeMode.cover}
               style={styles.profileImage}
             />
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <SVGCamera style={styles.cameraIcon} width={70} height={70} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <Text style={styles.profileName}>
             {user && user.name} {user && user.surname}
@@ -57,7 +63,7 @@ const Profile = () => {
         <View style={styles.line} />
         <View style={styles.optionsContainer}>
           {options.map(option => (
-            <TouchableOpacity key={option.id} style={styles.iconRow}>
+            <TouchableOpacity key={option.id} style={styles.iconRow} onPress={option.onPress}>
               <View style={styles.iconInfo}>
                 <View style={styles.iconContainer}>
                   <option.icon width={35} height={35} />

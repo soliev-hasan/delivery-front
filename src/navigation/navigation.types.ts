@@ -9,6 +9,7 @@ export type ScreensParams = {
   Search: undefined;
   Profile: undefined;
   Cart: undefined;
+  EditProfile: undefined;
 };
 
 export type RootRouteProps<RouteName extends keyof ScreensParams> = RouteProp<
