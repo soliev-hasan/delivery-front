@@ -12,6 +12,7 @@ export type ScreensParams = {
   EditProfile: {
     newUser?: boolean;
   };
+  Map: undefined;
 };
 
 export type RootRouteProps<RouteName extends keyof ScreensParams> = RouteProp<

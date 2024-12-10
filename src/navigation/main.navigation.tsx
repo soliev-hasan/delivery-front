@@ -6,6 +6,7 @@ import SingUp from '../pages/sign-up/sign-up.component';
 import Main from '../pages/main/main.component';
 import BottomTabNavigation from './bottom-tab.navigation';
 import EditProfile from '../pages/profile/editProfile.component';
+import Map from '../ui-components/map/map.component';
 
 const MainNavigation = () => {
   const Stack = createNativeStackNavigator<ScreensParams>();
@@ -34,6 +35,7 @@ const MainNavigation = () => {
         component={EditProfile}
         options={{headerShown: false}}
       />
+      <Stack.Screen name="Map" component={Map} options={{headerShown: false}} />
     </Stack.Navigator>
   );
 };

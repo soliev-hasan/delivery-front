@@ -13,17 +13,19 @@ export const Button = ({
   onPress,
   loading,
   disabled,
+  style,
 }: {
-  children: string;
+  children: any;
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
+  style?: any;
 }) => {
   return (
     <TouchableOpacity
       disabled={!disabled}
       onPress={onPress}
-      style={disabled ? styles.btn : styles.disabled}>
+      style={[disabled ? styles.btn : styles.disabled, style]}>
       {loading ? (
         <ActivityIndicator size={'small'} color={colors.white} />
       ) : (

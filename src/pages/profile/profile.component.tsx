@@ -44,16 +44,6 @@ const Profile = ({navigation}: RootNavigationProps<'Profile'>) => {
       icon: SVGSettings,
       onPress: () => console.log(''),
     },
-    {
-      id: 6,
-      name: 'Выход',
-      icon: SVGSettings,
-      onPress: async () => {
-        await AsyncStorage.clear();
-        setToken('');
-        navigation.navigate('SignUp');
-      },
-    },
   ];
   // const BASE_URL = `${DEVELOP_URL}/api/`;
   // const profilePhoto = `${BASE_URL}${user.photoUri}`.replace(/\\/g, '/');
@@ -67,10 +57,10 @@ const Profile = ({navigation}: RootNavigationProps<'Profile'>) => {
         <Header title={'Профиль'} />
         <View style={styles.profileInfo}>
           <View style={styles.imageContainer}>
-            {user && !user.phone ? (
+            {user && user.photoUri ? (
               <FastImage
                 source={{
-                  uri: user.phone,
+                  uri: user.photoUri,
                   priority: FastImage.priority.normal,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
@@ -107,9 +97,8 @@ const Profile = ({navigation}: RootNavigationProps<'Profile'>) => {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={async () => {
-            // navigation.navigate('SignUp');
-            navigation.navigate('SignUp');
             logout();
+            navigation.navigate('SignUp');
           }}
           style={styles.exitBtn}>
           <LogOut size={25} color={colors.redShade} />

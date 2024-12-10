@@ -3,6 +3,7 @@ import axios from 'axios';
 import {DEVELOP_URL, port} from '../helper/helper';
 import AuthContext from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 const BASE_URL = `${DEVELOP_URL}:${port}/api/`;
 
@@ -23,6 +24,7 @@ export const useApiRequest = () => {
 
         const headers = {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json', // Add this for POST requests
         };
 
         let response;
@@ -35,6 +37,8 @@ export const useApiRequest = () => {
           (headers as Record<string, string>)['Content-Type'] =
             'multipart/form-data';
           response = await axios.put(url, requestData, {headers});
+        } else if (method === 'delete') {
+          response = await axios.delete(url, {headers});
         } else {
           throw new Error('Unsupported request method');
         }
@@ -43,6 +47,11 @@ export const useApiRequest = () => {
         return response;
       } catch (err) {
         setError(err);
+        Toast.show({
+          type: ALERT_TYPE.DANGER,
+          title: 'Ошибка',
+          textBody: 'Попоробуйте позже',
+        });
         console.error('Error in API request:', err);
         if (err.response && err.response.status === 401) {
           let refreshToken = await AsyncStorage.getItem('refreshToken');

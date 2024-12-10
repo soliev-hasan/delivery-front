@@ -107,6 +107,14 @@ const EditProfile = ({
       console.error('Error saving profile:', err);
     }
   };
+  const isModified = () => {
+    return (
+      name !== (user?.name || '') ||
+      surname !== (user?.surname || '') ||
+      phone !== (user?.phone || '') ||
+      photo !== (user?.photoUri || '')
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -181,12 +189,7 @@ const EditProfile = ({
           )}
 
           <Button
-            disabled={
-              name.length > 0 &&
-              surname.length > 0 &&
-              newUser &&
-              phone.length === 9
-            }
+            disabled={isModified()}
             onPress={saveProfileInfo}
             loading={loading}>
             Сохранить

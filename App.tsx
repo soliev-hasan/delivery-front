@@ -10,6 +10,8 @@ import MainNavigation from './src/navigation/main.navigation';
 import {ActivityIndicator, StatusBar} from 'react-native';
 import colors from './src/helper/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {ModalProvider} from './src/ui-components/modal/modal.provider';
 
 function App() {
   const {
@@ -41,18 +43,22 @@ function App() {
         setRefreshToken,
         logout,
       }}>
-      <AlertNotificationRoot>
-        <Provider store={store}>
-          <StatusBar backgroundColor="white" barStyle="dark-content" />
-          {!isLoading ? (
-            <ActivityIndicator size={'large'} color={colors.black} />
-          ) : (
-            <NavigationContainer>
-              {token ? <MainNavigation /> : <SingUpNavigation />}
-            </NavigationContainer>
-          )}
-        </Provider>
-      </AlertNotificationRoot>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <ModalProvider>
+          <AlertNotificationRoot>
+            <Provider store={store}>
+              <StatusBar backgroundColor="white" barStyle="dark-content" />
+              {!isLoading ? (
+                <ActivityIndicator size={'large'} color={colors.black} />
+              ) : (
+                <NavigationContainer>
+                  {token ? <MainNavigation /> : <SingUpNavigation />}
+                </NavigationContainer>
+              )}
+            </Provider>
+          </AlertNotificationRoot>
+        </ModalProvider>
+      </GestureHandlerRootView>
     </AuthContext.Provider>
   );
 }
