@@ -36,6 +36,8 @@ export const useApiRequest = () => {
         } else if (method === 'put') {
           (headers as Record<string, string>)['Content-Type'] =
             'multipart/form-data';
+          console.log(requestData);
+
           response = await axios.put(url, requestData, {headers});
         } else if (method === 'delete') {
           response = await axios.delete(url, {headers});

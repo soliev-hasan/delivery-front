@@ -11,11 +11,12 @@ import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import {RootNavigationProps} from '../../navigation/navigation.types';
 import BackIcon from '../back-icon/back-icon.component';
 import AuthContext from '../../contexts/AuthContext';
+import axios from 'axios';
 
 const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
-  Geocoder.init('AIzaSyALKz46UoDvbMbBGENVA0AzjqLhC0ofDx4', {language: 'ru'});
-  const existingAddress = route.params?.address || null;
-  const {setUser, user} = useContext(AuthContext);
+  Geocoder.init('AIzaSyALKz46UoDvbMbBGENVA0AzjqLhC0ofDx4', {language: 'eng'});
+  const existingAddress = route.params?.address || null; // Получаем переданный адрес (если есть)
+  const {setUser, user, token} = useContext(AuthContext);
   const [marker, setMarker] = useState(
     existingAddress
       ? {
@@ -30,6 +31,7 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
   const {sendRequest} = useApiRequest();
   const [loading, setLoading] = useState(false);
 
+  // Устанавливаем начальное состояние формы
   const [formData, setFormData] = useState({
     country: existingAddress?.country || '',
     city: existingAddress?.city || '',
@@ -73,6 +75,7 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
 
         setAddress(formattedAddress);
 
+        // Обновляем данные формы при изменении маркера
         setFormData(prevState => ({
           ...prevState,
           city,
@@ -100,27 +103,44 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
     const method = existingAddress ? 'put' : 'post';
 
     try {
-      const response = await sendRequest(method, endpoint, {
-        country: formData.country,
-        city: formData.city,
-        street: formData.street,
-        latitude: formData.latitude,
-        longitude: formData.longitude,
-        entrance: formData.entrance,
-        floor: formData.floor,
-        apartment: formData.apartment,
-        house: formData.house,
-      });
-
-      if (response.status === 200 || response.status === 201) {
-        Toast.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: 'Успешно',
-          textBody: existingAddress ? 'Адрес изменен' : 'Адрес добавлен',
-        });
-
-        setUser(response.data.user);
-        navigation.goBack();
+      if (method == 'post') {
+        const response = await sendRequest(method, endpoint, formData);
+        if (response.status === 200 || response.status === 201) {
+          Toast.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: 'Успешно',
+            textBody: 'Адрес добавлен',
+          });
+          setUser(response.data.user);
+          navigation.goBack();
+          console.log(response.data);
+        }
+      } else {
+        axios
+          .put(
+            'http://192.168.1.36:3434/api/user/address/' + existingAddress._id,
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            },
+          )
+          .then(response => {
+            if (response.status === 200 || response.status === 201) {
+              Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Успешно',
+                textBody: 'Адрес изменен',
+              });
+              sendRequest('get', 'user/me')
+                .then(response => {
+                  setUser(response.data.user);
+                })
+                .finally(() => navigation.goBack());
+            }
+          });
       }
     } catch (error) {
       Toast.show({
