@@ -5,7 +5,7 @@ import AuthContext from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
-const BASE_URL = `${DEVELOP_URL}:${port}/api/`;
+const BASE_URL = `${DEVELOP_URL}/api/`;
 
 export const useApiRequest = () => {
   const [loading, setLoading] = useState(false);
