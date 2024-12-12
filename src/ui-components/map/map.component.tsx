@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, Text, View} from 'react-native';
+import {Alert, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useState} from 'react';
 import MapView, {Marker, UrlTile} from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
@@ -12,11 +12,13 @@ import {RootNavigationProps} from '../../navigation/navigation.types';
 import BackIcon from '../back-icon/back-icon.component';
 import AuthContext from '../../contexts/AuthContext';
 import axios from 'axios';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
   Geocoder.init('AIzaSyALKz46UoDvbMbBGENVA0AzjqLhC0ofDx4', {language: 'eng'});
   const existingAddress = route.params?.address || null; // Получаем переданный адрес (если есть)
   const {setUser, user, token} = useContext(AuthContext);
+  const [isAutocompleteSelecting, setIsAutocompleteSelecting] = useState(false);
   const [marker, setMarker] = useState(
     existingAddress
       ? {
@@ -45,6 +47,7 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
   });
 
   const handleMapPress = async event => {
+    if (isAutocompleteSelecting) return; // Блокируем обработчик карты
     const {latitude, longitude} = event.nativeEvent.coordinate;
     setMarker({latitude, longitude});
 
@@ -155,7 +158,7 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
   };
 
   return (
-    <>
+    <SafeAreaView style={{flex: 1}}>
       <View style={styles.back}>
         <BackIcon />
       </View>
@@ -180,6 +183,72 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
             description={`Широта: ${marker.latitude}, Долгота: ${marker.longitude}`}
           />
         )}
+        <GooglePlacesAutocomplete
+          placeholder="Введите адрес"
+          minLength={2}
+          fetchDetails={true}
+          onPress={(data, details = null) => {
+            setIsAutocompleteSelecting(true); // Активируем блокировку
+            const {lat, lng} = details.geometry.location;
+            setMarker({latitude: lat, longitude: lng});
+            setFormData(prevState => ({
+              ...prevState,
+              latitude: lat,
+              longitude: lng,
+              city: details.address_components.find(comp =>
+                comp.types.includes('locality'),
+              )?.long_name,
+              country: details.address_components.find(comp =>
+                comp.types.includes('country'),
+              )?.long_name,
+              street: details.address_components.find(comp =>
+                comp.types.includes('route'),
+              )?.long_name,
+            }));
+
+            const {geometry, address_components, formatted_address} = details;
+            let city = '';
+            let country = '';
+            let street = formatted_address.split(',')[0].trim(); // Первый элемент адреса
+
+            // Обходим компоненты адреса
+            address_components.forEach(component => {
+              if (component.types.includes('locality')) {
+                city = component.long_name;
+              } else if (component.types.includes('country')) {
+                country = component.long_name;
+              } else if (component.types.includes('route')) {
+                street = component.long_name; // Улица из компонента
+              }
+            });
+            setAddress(formatted_address);
+
+            setTimeout(() => setIsAutocompleteSelecting(false), 500); // Сбрасываем флаг через 500 мс
+          }}
+          query={{
+            key: 'AIzaSyALKz46UoDvbMbBGENVA0AzjqLhC0ofDx4',
+            language: 'ru',
+          }}
+          suppressDefaultStyles={false}
+          styles={{
+            container: {
+              position: 'absolute',
+              top: 10,
+              width: '85%',
+              alignSelf: 'center',
+              zIndex: 10,
+            },
+            textInput: {
+              height: 40,
+              backgroundColor: '#FFF',
+              borderRadius: 5,
+              paddingHorizontal: 10,
+              fontSize: 16,
+              marginLeft: 55,
+              marginTop: 10,
+            },
+          }}
+        />
       </MapView>
 
       <View style={styles.modal}>
@@ -226,7 +295,7 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
           </Button>
         </View>
       </View>
-    </>
+    </SafeAreaView>
   );
 };
 
@@ -260,9 +329,10 @@ const styles = StyleSheet.create({
   back: {
     position: 'absolute',
     top: 70,
-    left: 40,
+    left: 10,
     zIndex: 99,
-    backgroundColor: colors.grayDark,
+    backgroundColor: colors.main,
     borderRadius: 90,
   },
+  autocomplete: {},
 });
