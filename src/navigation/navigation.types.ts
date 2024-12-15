@@ -1,5 +1,5 @@
-import {RouteProp} from '@react-navigation/native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type ScreensParams = {
   Otp: undefined;
@@ -13,6 +13,9 @@ export type ScreensParams = {
     newUser?: boolean;
   };
   Map: undefined;
+  ProductDetail: {
+    product: Object;
+  };
 };
 
 export type RootRouteProps<RouteName extends keyof ScreensParams> = RouteProp<
