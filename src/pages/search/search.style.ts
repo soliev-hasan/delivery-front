@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import colors from '../../helper/colors';
 
 export default StyleSheet.create({
@@ -19,7 +19,7 @@ export default StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     shadowColor: colors.white,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
@@ -36,9 +36,17 @@ export default StyleSheet.create({
   },
   productPrice: {
     fontSize: 14,
-    color: '#888'
+    color: '#888',
   },
   inputContainer: {
     marginVertical: 20,
-  }
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  none: {
+    fontSize: 18,
+    color: colors.black,
+    textAlign: 'center',
+  },
 });

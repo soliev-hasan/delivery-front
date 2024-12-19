@@ -13,6 +13,20 @@
     </array>
   </dict>
 </array>
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSExceptionDomains</key>
+    <dict>
+        <key>89.104.68.128</key>
+        <dict>
+            <key>NSExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+        </dict>
+    </dict>
+</dict>
+
 <key>NSPhotoLibraryUsageDescription</key>
 <string>Приложение требует доступ к вашей библиотеке фотографий.</string>
 <key>NSCameraUsageDescription</key>

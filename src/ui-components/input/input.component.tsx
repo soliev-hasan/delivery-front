@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, {ReactElement, useState} from 'react';
 import {
   Text,
   TextInput,
@@ -8,8 +8,9 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { Eye, EyeOff, Search } from 'lucide-react-native';
+import {Eye, EyeOff, Search} from 'lucide-react-native';
 import styles from './input.style';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export const Input = ({
   wrapperStyle,
@@ -22,6 +23,7 @@ export const Input = ({
   icon,
   onIconPress,
   showCountryCode = true,
+  onPressSearch,
   ...node
 }: {
   wrapperStyle?: ViewStyle;
@@ -34,6 +36,7 @@ export const Input = ({
   icon?: ReactElement;
   onIconPress?: () => void;
   showCountryCode?: boolean;
+  onPressSearch?: () => void;
 } & TextInputProps) => {
   // ---------------------------------------------------------------------------
   // variables
@@ -62,20 +65,21 @@ export const Input = ({
         wrapperStyle,
         isInputFocused ? styles.focusedInput : {},
       ]}>
-      {
-        showCountryCode && (<Text style={styles.placheholder}>+992 </Text>)
-      }
+      {showCountryCode && <Text style={styles.placheholder}>+992 </Text>}
       <TextInput
         {...node}
         autoCapitalize="none"
         secureTextEntry={type === 'password' && !isPasswordVisible}
-        style={[{ ...styles.input, ...inputStyles }]}
+        style={[{...styles.input, ...inputStyles}]}
         ref={inputRef}
         onFocus={() => setInputFocused(true)}
         onBlur={() => setInputFocused(false)}
+        onSubmitEditing={onPressSearch}
       />
       {showIcon && type === 'search' ? (
-        <Search style={{ marginRight: 5 }} size={iconSize} color="#b3b3b3" />
+        <TouchableOpacity onPress={onPressSearch}>
+          <Search style={{marginRight: 5}} size={iconSize} color="#b3b3b3" />
+        </TouchableOpacity>
       ) : null}
       {type === 'password' && isInputFocused ? (
         <TouchableWithoutFeedback onPress={handleIconPress}>
