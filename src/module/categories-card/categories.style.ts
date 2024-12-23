@@ -17,9 +17,13 @@ export default StyleSheet.create({
     padding: 5,
   },
   name: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '700',
     alignSelf: 'flex-start',
+    color: colors.white,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)', // Цвет тени
+    textShadowOffset: {width: 1, height: 1}, // Смещение тени
+    textShadowRadius: 3, // Радиус размытия тени
   },
   photo: {
     width: 90,

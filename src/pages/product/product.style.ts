@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import colors from '../../helper/colors';
 
 export default StyleSheet.create({
@@ -34,7 +34,7 @@ export default StyleSheet.create({
     marginHorizontal: 3,
   },
   productInfo: {
-    padding: 15,
+    paddingVertical: 15,
   },
   productName: {
     fontSize: 26,
@@ -52,7 +52,7 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-    paddingHorizontal: 15,
+    // paddingHorizontal: 15,
     color: colors.black,
   },
   productPrice: {
@@ -78,9 +78,12 @@ export default StyleSheet.create({
   iconCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 2,
+    gap: 5,
   },
   cartSection: {
+    position: 'absolute', // Закрепляем секцию
+    bottom: 30,
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -89,6 +92,11 @@ export default StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#ccc',
     backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: -2},
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   quantityControls: {
     flexDirection: 'row',
@@ -98,39 +106,19 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     marginHorizontal: 10,
-    color: colors.black
-  },
-  addToCartButton: {
-    backgroundColor: '#FE8C00',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 5,
-  },
-  addToCartText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  loadingText: {
-    fontSize: 18,
-    color: '#666',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 10,
+    color: colors.black,
   },
   button: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FE8C00',
     paddingHorizontal: 30,
-    paddingVertical: 20,
-    borderRadius: 50,
+    paddingVertical: 15,
+    borderRadius: 30,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     elevation: 3,
   },
   icon: {
@@ -144,23 +132,23 @@ export default StyleSheet.create({
   line: {
     width: '100%',
     height: 2,
-    marginVertical: 15,
-    backgroundColor: colors.grayLight
+    marginBottom: 15,
+    backgroundColor: colors.grayLight,
   },
   columnWrapper: {
     justifyContent: 'space-between',
     marginBottom: 15,
-    paddingHorizontal: 15
+    // paddingHorizontal: 15,
   },
   similarProductCard: {
     width: '48%',
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     borderRadius: 10,
     padding: 10,
     elevation: 3,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 7, height: 7},
   },
   similarProductImage: {
     width: '100%',
@@ -204,5 +192,20 @@ export default StyleSheet.create({
     color: '#888',
     textAlign: 'center',
     marginTop: 10,
+  },
+  loadingContainer: {
+    position: 'absolute',
+    zIndex: 99,
+    width: 60,
+    height: 60,
+    left: '44%',
+    top: '42%',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: {width: 5, height: 5},
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
   },
 });

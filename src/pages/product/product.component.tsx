@@ -40,27 +40,33 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
     console.log('Added to cart:', product, quantity);
   };
 
-  const getProduct = async id => {
-    const response = await sendRequest('get', `product/${id}`);
-    setProduct(response.data.product);
-  };
-
-  const getSimilar = async id => {
-    const response = await sendRequest('get', `product/${id}/similar`);
-    setSimilarProducts(response.data.products || []);
+  const getProduct = async (id: string) => {
+    Promise.all([
+      sendRequest('get', `product/${id}`).then(response =>
+        setProduct(response.data.product),
+      ),
+      sendRequest('get', `product/${id}/similar`).then(response =>
+        setSimilarProducts(response.data.products || []),
+      ),
+    ]);
   };
 
   useEffect(() => {
     getProduct(route.params.product._id);
-    getSimilar(route.params.product._id);
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <Header backIcon title="Детали" />
-        <View style={{flex: 1, padding: 15}}>
-          {Object.keys(product).length > 0 ? (
+        <View
+          style={{
+            flex: 1,
+            paddingHorizontal: 20,
+            paddingBottom: 90,
+            marginTop: 15,
+          }}>
+          {Object.keys(product).length > 0 && (
             <>
               <Swiper
                 style={{height: 300}}
@@ -73,7 +79,10 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
                   product.photos.map((photo: string, index: number) => (
                     <Image
                       key={index}
-                      source={{uri: `${BASE_URL}${photo}`}}
+                      // source={{uri: `${BASE_URL}${photo}`}}
+                      source={{
+                        uri: 'https://media.istockphoto.com/id/1309352410/ru/%D1%84%D0%BE%D1%82%D0%BE/%D1%87%D0%B8%D0%B7%D0%B1%D1%83%D1%80%D0%B3%D0%B5%D1%80-%D1%81-%D0%BF%D0%BE%D0%BC%D0%B8%D0%B4%D0%BE%D1%80%D0%B0%D0%BC%D0%B8-%D0%B8-%D1%81%D0%B0%D0%BB%D0%B0%D1%82%D0%BE%D0%BC-%D0%BD%D0%B0-%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D1%8F%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B4%D0%BE%D1%81%D0%BA%D0%B5.jpg?s=612x612&w=0&k=20&c=dW1Aguo-4PEcRs79PUbmMXpx5YrBjqSYiEhwnddbj_g=',
+                      }}
                       style={styles.productImage}
                       resizeMode="cover"
                     />
@@ -89,12 +98,12 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
 
               <View style={styles.productInfo}>
                 <Text style={styles.productName}>{product.name}</Text>
-                <Text style={styles.productPrice}>${product.price}</Text>
+                <Text style={styles.productPrice}>{product.price} c</Text>
                 <View style={styles.row}>
                   <View style={styles.iconCard}>
-                    <DollarSign color="#FE8C00" size={20} />
                     <Text style={styles.productDeliveryInfo}>
-                      Бесплатная доставка
+                      <Text style={{color: colors.main}}>C</Text> Бесплатная
+                      доставка
                     </Text>
                   </View>
                   <View style={styles.iconCard}>
@@ -120,13 +129,19 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
                   numColumns={2} // Two-column grid
                   columnWrapperStyle={styles.columnWrapper}
                   renderItem={({item}) => (
-                    <TouchableOpacity style={styles.similarProductCard}>
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      onPress={() => getProduct(item._id)}
+                      style={styles.similarProductCard}>
                       <Image
                         source={{
-                          uri: item.photos?.[0]
-                            ? `${BASE_URL}${item.photos[0]}`
-                            : 'https://via.placeholder.com/150',
+                          uri: 'https://media.istockphoto.com/id/1309352410/ru/%D1%84%D0%BE%D1%82%D0%BE/%D1%87%D0%B8%D0%B7%D0%B1%D1%83%D1%80%D0%B3%D0%B5%D1%80-%D1%81-%D0%BF%D0%BE%D0%BC%D0%B8%D0%B4%D0%BE%D1%80%D0%B0%D0%BC%D0%B8-%D0%B8-%D1%81%D0%B0%D0%BB%D0%B0%D1%82%D0%BE%D0%BC-%D0%BD%D0%B0-%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D1%8F%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B4%D0%BE%D1%81%D0%BA%D0%B5.jpg?s=612x612&w=0&k=20&c=dW1Aguo-4PEcRs79PUbmMXpx5YrBjqSYiEhwnddbj_g=',
                         }}
+                        // source={{
+                        //   uri: item.photos?.[0]
+                        //     ? `${BASE_URL}${item.photos[0]}`
+                        //     : 'https://via.placeholder.com/150',
+                        // }}
                         style={styles.similarProductImage}
                       />
                       <Text style={styles.similarProductName}>{item.name}</Text>
@@ -140,7 +155,7 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
                           </Text>
                         </View>
                         <Text style={styles.similarProductPrice}>
-                          ${item.price}
+                          {item.price} с
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -150,28 +165,29 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
                 <Text style={styles.noSimilar}>Нет похожих товаров.</Text>
               )}
             </>
-          ) : (
+          )}
+          {loading && (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size={'large'} color={colors.black} />
+              <ActivityIndicator size={'large'} color={colors.main} />
             </View>
           )}
         </View>
-        <View style={styles.cartSection}>
-          <View style={styles.quantityControls}>
-            <TouchableOpacity onPress={handleDecrease}>
-              <MinusCircle size={40} color="#FE8C00" />
-            </TouchableOpacity>
-            <Text style={styles.quantityText}>{quantity}</Text>
-            <TouchableOpacity onPress={handleIncrease}>
-              <PlusCircle size={40} color="#FE8C00" />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity style={styles.button}>
-            <ShoppingCart size={20} color="#fff" style={styles.icon} />
-            <Text style={styles.buttonText}>В корзину</Text>
+      </ScrollView>
+      <View style={styles.cartSection}>
+        <View style={styles.quantityControls}>
+          <TouchableOpacity activeOpacity={0.8} onPress={handleDecrease}>
+            <MinusCircle size={40} color="#FE8C00" />
+          </TouchableOpacity>
+          <Text style={styles.quantityText}>{quantity}</Text>
+          <TouchableOpacity activeOpacity={0.8} onPress={handleIncrease}>
+            <PlusCircle size={40} color="#FE8C00" />
           </TouchableOpacity>
         </View>
-      </ScrollView>
+        <TouchableOpacity activeOpacity={0.8} style={styles.button}>
+          <ShoppingCart size={20} color="#fff" style={styles.icon} />
+          <Text style={styles.buttonText}>В корзину</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

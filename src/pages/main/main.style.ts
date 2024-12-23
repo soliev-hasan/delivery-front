@@ -4,52 +4,46 @@ import colors from '../../helper/colors';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgb(239, 237, 237)',
+    backgroundColor: colors.white,
+    paddingBottom: -35,
   },
   categories: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   header: {
     height: 230,
     backgroundColor: 'gray',
+    justifyContent: 'flex-start',
+    paddingTop: 20,
   },
   overlay: {
-    ...StyleSheet.absoluteFillObject, // Заполнить весь родительский контейнер
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Полупрозрачный черный цвет
-  },
-  content: {
-    zIndex: 1, // Убедиться, что контент поверх наложения
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   adress: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
   text: {
     color: colors.white,
-    fontSize: 20,
-    padding: 20,
-  },
-  rowAdress: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 10,
-    flex: 1,
-  },
-  newAdress: {
     fontSize: 18,
-    color: colors.black,
+    fontWeight: '600',
   },
   title: {
-    fontSize: 22,
-    color: colors.black,
-    fontWeight: '600',
+    fontSize: 24,
+    fontWeight: '700',
     textAlign: 'center',
-    marginVertical: 15,
+    color: colors.black,
+    marginVertical: 20,
   },
   address: {
-    gap: 20,
-    paddingHorizontal: 10,
+    gap: 15,
+    paddingHorizontal: 20,
   },
   street: {
     fontSize: 16,
@@ -65,22 +59,39 @@ export default StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  active: {
-    color: colors.white,
-    fontSize: 18,
-  },
-  rowPin: {
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    marginLeft: 18,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 12,
+    padding: 15,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   menu: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: 150,
-    paddingLeft: 20,
+    gap: 10,
+    width: 180,
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: colors.white,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  button: {
+    backgroundColor: colors.main,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: '700',
   },
 });

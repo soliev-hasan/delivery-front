@@ -24,8 +24,8 @@ const Search = ({navigation}: RootNavigationProps<'Main'>) => {
   const BASE_URL = `${DEVELOP_URL}/api/`;
 
   const searchProduct = async () => {
-    if (searchText.trim() === '') return; // Если текст пустой, не выполнять поиск
-    setSearchExecuted(true); // Установить флаг поиска в true
+    if (searchText.trim() === '') return;
+    setSearchExecuted(true);
     const response = await sendRequest('get', 'product', {search: searchText});
     setProducts(response.data.products);
   };
@@ -34,23 +34,20 @@ const Search = ({navigation}: RootNavigationProps<'Main'>) => {
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('ProductDetail', {product: item})}
-        style={styles.productItem}>
-        {item?.photos?.length > 0 ? (
-          <Image
-            source={{uri: `${BASE_URL}${item.photos[0]}`}}
-            style={styles.productImage}
-            resizeMode="cover"
-          />
-        ) : (
-          <Image
-            source={{uri: 'https://via.placeholder.com/300'}}
-            style={styles.productImage}
-            resizeMode="cover"
-          />
-        )}
-        <View>
+        style={styles.productItem}
+        activeOpacity={0.8}>
+        <Image
+          // source={{uri: `${BASE_URL}${item.photos[0]}`}}
+          source={{
+            uri: 'https://chefrestoran.ru/wp-content/uploads/2018/10/309014621.jpg',
+          }}
+          style={styles.productImage}
+          resizeMode="cover"
+        />
+
+        <View style={{gap: 5, alignSelf: 'flex-start'}}>
           <Text style={styles.productName}>{item.name}</Text>
-          <Text style={styles.productPrice}>${item.price}</Text>
+          <Text style={styles.productPrice}>{item.price}c</Text>
         </View>
       </TouchableOpacity>
     );
@@ -58,7 +55,7 @@ const Search = ({navigation}: RootNavigationProps<'Main'>) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header backIcon title="Поиск" />
+      <Header title="Поиск" />
       <View style={styles.inputContainer}>
         <Input
           type="search"
@@ -69,6 +66,8 @@ const Search = ({navigation}: RootNavigationProps<'Main'>) => {
           onPressSearch={searchProduct}
         />
       </View>
+      {loading && <ActivityIndicator color={colors.main} size={'large'} />}
+
       <View style={styles.productsContainer}>
         {!searchExecuted ? (
           <Text style={styles.none}>Введите текст для поиска</Text>
@@ -78,11 +77,12 @@ const Search = ({navigation}: RootNavigationProps<'Main'>) => {
             keyExtractor={item => item._id}
             renderItem={renderProduct}
             showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.products}
           />
-        ) : loading ? (
-          <ActivityIndicator color={colors.main} size={'large'} />
         ) : (
-          <Text style={styles.none}>По вашему запросу ничего не найдено</Text>
+          !loading && (
+            <Text style={styles.none}>По вашему запросу ничего не найдено</Text>
+          )
         )}
       </View>
     </SafeAreaView>

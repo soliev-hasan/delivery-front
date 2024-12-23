@@ -25,7 +25,7 @@ import {
   Plus,
   Trash,
 } from 'lucide-react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {RootNavigationProps} from '../../navigation/navigation.types';
 import {Button} from '../../ui-components/button/button.component';
 import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
@@ -85,33 +85,35 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={{
-          uri: 'https://www.wfla.com/wp-content/uploads/sites/71/2023/04/GettyImages-1407832840.jpg?w=2560&h=1440&crop=1',
-        }}
-        style={styles.header}>
-        <View style={styles.overlay} />
-        <TouchableOpacity
-          onPress={() => ref.current.open()}
-          style={styles.adress}>
-          <Text style={styles.text}>Ваш адрес</Text>
-          <ChevronDown color={colors.white} />
-        </TouchableOpacity>
-      </ImageBackground>
+      <ScrollView>
+        <ImageBackground
+          source={{
+            uri: 'https://www.sterevan.ru/images/catalog/3fa4080579377c5e94c125fd0b124106.jpg',
+          }}
+          style={styles.header}>
+          <View style={styles.overlay} />
+          <TouchableOpacity
+            onPress={() => ref.current.open()}
+            style={styles.adress}>
+            <Text style={styles.text}>Ваш адрес</Text>
+            <ChevronDown color={colors.white} />
+          </TouchableOpacity>
+        </ImageBackground>
 
-      <View style={styles.categories}>
-        {categories.categories.length > 0 ? (
-          <FlatList
-            data={categories.categories}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{gap: 40}}
-            keyExtractor={item => item.name.toString()}
-            renderItem={({item}) => <Categories data={item} />}
-          />
-        ) : (
-          <ActivityIndicator color={colors.main} size={'large'} />
-        )}
-      </View>
+        <View style={styles.categories}>
+          {categories.categories.length > 0 ? (
+            <FlatList
+              data={categories.categories}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{gap: 40}}
+              keyExtractor={item => item._id}
+              renderItem={({item}) => <Categories data={item} />}
+            />
+          ) : (
+            <ActivityIndicator color={colors.main} size={'large'} />
+          )}
+        </View>
+      </ScrollView>
 
       {/* Modal address */}
       <Modalize
