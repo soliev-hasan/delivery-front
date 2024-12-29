@@ -1,5 +1,5 @@
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   BottomTabBar,
   createBottomTabNavigator,
@@ -16,9 +16,15 @@ import {
 import Cart from '../pages/cart/cart.component';
 import Search from '../pages/search/search.component';
 import Profile from '../pages/profile/profile.component';
+import {useSelector} from 'react-redux';
+import cartSelectors from '../store/cart/selectors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthContext from '../contexts/AuthContext';
 const BottomTab = createBottomTabNavigator<ScreensParams>();
 
 const BottomTabNavigation = () => {
+  const {cart} = useContext(AuthContext);
+
   return (
     <BottomTab.Navigator
       initialRouteName="Main"
@@ -78,7 +84,9 @@ const BottomTabNavigation = () => {
 
             // marginTop: 8,
           },
+
           headerShown: false,
+          tabBarBadge: cart.length > 0 ? cart.length : undefined,
         }}
       />
       <BottomTab.Screen

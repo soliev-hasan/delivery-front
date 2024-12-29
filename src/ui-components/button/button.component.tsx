@@ -16,7 +16,7 @@ export const Button = ({
   style,
 }: {
   children: any;
-  onPress: () => void;
+  onPress?: () => void;
   loading?: boolean;
   disabled?: boolean;
   style?: any;

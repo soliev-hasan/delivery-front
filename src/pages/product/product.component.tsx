@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   FlatList,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import {
@@ -25,6 +26,12 @@ import {DEVELOP_URL} from '../../helper/helper';
 import colors from '../../helper/colors';
 import {useApiRequest} from '../../hooks/useRequest';
 import styles from './product.style';
+import {useDispatch, useSelector} from 'react-redux';
+import cartActions from '../../store/cart/actions';
+import cartSelectors from '../../store/cart/selectors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import AuthContext from '../../contexts/AuthContext';
 
 const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
   const [quantity, setQuantity] = useState(1);
@@ -32,14 +39,38 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
   const [similarProducts, setSimilarProducts] = useState([]);
   const BASE_URL = `${DEVELOP_URL}/api/`;
   const {sendRequest, loading} = useApiRequest();
-
+  const dispatch = useDispatch();
   const handleIncrease = () => setQuantity(prev => prev + 1);
   const handleDecrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+  const {cart, setCart} = useContext(AuthContext);
 
-  const handleAddToCart = () => {
-    console.log('Added to cart:', product, quantity);
+  const saveCart = async () => {
+    try {
+      const existingCart = await AsyncStorage.getItem('cart');
+      let cart = existingCart ? JSON.parse(existingCart) : [];
+
+      // Проверяем, что cart является массивом
+      if (!Array.isArray(cart)) {
+        cart = [];
+      }
+
+      // Добавляем новый продукт в корзину
+      const updatedCart = [...cart, {...product, quantity}];
+
+      // Сохраняем обновленную корзину в AsyncStorage
+      await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
+
+      setCart(updatedCart);
+
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: 'Успешно',
+        textBody: 'Добавлено на карзину',
+      });
+    } catch (error) {
+      console.error('Failed to save cart to AsyncStorage', error);
+    }
   };
-
   const getProduct = async (id: string) => {
     Promise.all([
       sendRequest('get', `product/${id}`).then(response =>
@@ -183,7 +214,10 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
             <PlusCircle size={40} color="#FE8C00" />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity activeOpacity={0.8} style={styles.button}>
+        <TouchableOpacity
+          onPress={saveCart}
+          activeOpacity={0.8}
+          style={styles.button}>
           <ShoppingCart size={20} color="#fff" style={styles.icon} />
           <Text style={styles.buttonText}>В корзину</Text>
         </TouchableOpacity>

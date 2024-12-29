@@ -9,7 +9,7 @@ export default StyleSheet.create({
   },
   card: {
     backgroundColor: '#f6f6f6',
-    width: 126,
+    width: 120,
     borderRadius: 10,
     height: 170,
     alignItems: 'center',
@@ -32,6 +32,6 @@ export default StyleSheet.create({
   categories: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
+    gap: 15,
   },
 });

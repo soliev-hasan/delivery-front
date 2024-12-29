@@ -28,6 +28,7 @@ export default StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 12,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    justifyContent: 'space-between',
   },
   text: {
     color: colors.white,

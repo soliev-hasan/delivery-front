@@ -31,10 +31,13 @@ import {Button} from '../../ui-components/button/button.component';
 import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
 import {Modalize} from 'react-native-modalize';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import cartActions from '../../store/cart/actions';
 
 const Main = ({navigation}: RootNavigationProps<'Main'>) => {
   const {sendRequest} = useApiRequest();
-  const {setUser, user, token, refreshToken} = useContext(AuthContext);
+  const {setUser, user, token, refreshToken, setCart, cart} =
+    useContext(AuthContext);
   const dispatch = useDispatch();
   const categories = useSelector(categoriesSelectors.allCategories);
   const modal = useModal();
@@ -42,6 +45,7 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
   const [selectedAddress, setSelectedAddress] = useState();
   const [loadingAddressId, setLoadingAddressId] = useState(null);
   const ref = useRef();
+
   const deleteAdress = async () => {
     if (!selectedAddress) return;
     setLoadingAddressId(selectedAddress._id);
@@ -69,7 +73,19 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
 
+  const fetchCart = async () => {
+    try {
+      const cartData = await AsyncStorage.getItem('cart');
+      if (cartData !== null) {
+        setCart(JSON.parse(cartData));
+      }
+    } catch (error) {
+      console.error('Failed to fetch cart from AsyncStorage', error);
+    }
+  };
+
   useEffect(() => {
+    fetchCart();
     Promise.all([
       sendRequest('get', 'user/me').then(response =>
         setUser(response.data.user),

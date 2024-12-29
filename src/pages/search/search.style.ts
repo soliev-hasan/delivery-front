@@ -8,8 +8,7 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
   },
   productsContainer: {
-    marginTop: 20,
-    flex: 1,
+    marginTop: 10,
   },
   products: {
     flexDirection: 'row',
