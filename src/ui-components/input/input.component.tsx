@@ -1,4 +1,4 @@
-import React, {ReactElement, useState} from 'react';
+import React, { ReactElement, useState } from 'react';
 import {
   Text,
   TextInput,
@@ -8,9 +8,9 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {Eye, EyeOff, Search} from 'lucide-react-native';
+import { Eye, EyeOff, Search, SlidersHorizontal } from 'lucide-react-native';
 import styles from './input.style';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export const Input = ({
   wrapperStyle,
@@ -21,6 +21,8 @@ export const Input = ({
   showIcon = true,
   inputRef,
   icon,
+  filterIcon = false,
+  onFilterIconPress,
   onIconPress,
   showCountryCode = true,
   onPressSearch,
@@ -33,7 +35,9 @@ export const Input = ({
   iconStyle?: TextStyle;
   showIcon?: boolean;
   inputRef?: React.RefObject<TextInput>;
+  filterIcon?: boolean;
   icon?: ReactElement;
+  onFilterIconPress?: () => void;
   onIconPress?: () => void;
   showCountryCode?: boolean;
   onPressSearch?: () => void;
@@ -56,6 +60,12 @@ export const Input = ({
     }
   };
 
+  const onPressFilter = () => {
+    if (onFilterIconPress) {
+      onFilterIconPress();
+    }
+  };
+
   // ---------------------------------------------------------------------------
 
   return (
@@ -70,7 +80,7 @@ export const Input = ({
         {...node}
         autoCapitalize="none"
         secureTextEntry={type === 'password' && !isPasswordVisible}
-        style={[{...styles.input, ...inputStyles}]}
+        style={[{ ...styles.input, ...inputStyles }]}
         ref={inputRef}
         onFocus={() => setInputFocused(true)}
         onBlur={() => setInputFocused(false)}
@@ -78,7 +88,12 @@ export const Input = ({
       />
       {showIcon && type === 'search' ? (
         <TouchableOpacity onPress={onPressSearch}>
-          <Search style={{marginRight: 5}} size={iconSize} color="#b3b3b3" />
+          <Search style={{ marginRight: 5 }} size={iconSize} color="#b3b3b3" />
+        </TouchableOpacity>
+      ) : null}
+      {filterIcon ? (
+        <TouchableOpacity onPress={onPressFilter}>
+          <SlidersHorizontal style={{ marginRight: 5 }} size={iconSize} color="#b3b3b3" />
         </TouchableOpacity>
       ) : null}
       {type === 'password' && isInputFocused ? (

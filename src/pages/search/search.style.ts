@@ -60,4 +60,52 @@ export default StyleSheet.create({
     color: colors.black,
     textAlign: 'center',
   },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: '#333',
+  },
+  tabsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 25
+  },
+  tab: {
+    paddingVertical: 8,
+    flex: 1,
+    alignItems: 'center',
+  },
+  activeTab: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#000',
+  },
+  tabText: {
+    fontSize: 14,
+    color: '#888',
+  },
+  activeTabText: {
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  orderToggle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 12,
+  },
+  orderButton: {
+    padding: 12,
+    backgroundColor: '#e9ecef',
+    borderRadius: 6,
+    flex: 1,
+    marginHorizontal: 4,
+    alignItems: 'center',
+  },
+  activeButton: {
+    backgroundColor: '#007bff',
+  },
+  orderText: {
+    fontSize: 16,
+    color: '#fff',
+  },
 });

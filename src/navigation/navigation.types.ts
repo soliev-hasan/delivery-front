@@ -16,6 +16,11 @@ export type ScreensParams = {
   ProductDetail: {
     product: Object;
   };
+  SubCategory: {
+    categoryId: string;
+    subcategoryId: string;
+    title: string;
+  };
 };
 
 export type RootRouteProps<RouteName extends keyof ScreensParams> = RouteProp<

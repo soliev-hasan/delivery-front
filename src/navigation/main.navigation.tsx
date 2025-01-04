@@ -8,6 +8,7 @@ import BottomTabNavigation from './bottom-tab.navigation';
 import EditProfile from '../pages/profile/editProfile.component';
 import Map from '../ui-components/map/map.component';
 import ProductDetail from '../pages/product/product.component';
+import SubCategory from '../pages/subcategory/subcategory.component';
 
 const MainNavigation = () => {
   const Stack = createNativeStackNavigator<ScreensParams>();
@@ -40,6 +41,11 @@ const MainNavigation = () => {
       <Stack.Screen
         name="ProductDetail"
         component={ProductDetail}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SubCategory"
+        component={SubCategory}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
