@@ -3,6 +3,7 @@ import {Text, View} from 'react-native';
 
 import {useModal} from '../modal/modal.hook';
 import {Button} from '../button/button.component';
+import colors from '../../helper/colors';
 
 export const ConfirmationModalize = ({
   title,
@@ -64,16 +65,32 @@ export const ConfirmationModalize = ({
         style={{
           alignItems: 'center',
           flexDirection: 'row',
-          justifyContent: 'flex-end',
+          justifyContent: 'space-between',
           marginTop: 40,
           marginRight: 20,
           marginBottom: 16,
+          paddingHorizontal: 40,
         }}>
-        <Button children="Отмена" onPress={() => modal.close()} />
+        <Button
+          disabled
+          style={{
+            width: 100,
+            backgroundColor: colors.grayDark,
+            borderRadius: 10,
+          }}
+          children="Отмена"
+          onPress={() => modal.close()}
+        />
 
         {mode === 'danger' && (
           <Button
             children={mainActionText}
+            style={{
+              width: 100,
+              backgroundColor: colors.redShade,
+              borderRadius: 10,
+            }}
+            disabled
             onPress={() => {
               onConfirm();
               modal.close();

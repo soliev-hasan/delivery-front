@@ -20,6 +20,9 @@ export type ScreensParams = {
     categoryId: string;
     subcategoryId: string;
     title: string;
+  }
+  Payment: {
+    total: any;
   };
 };
 

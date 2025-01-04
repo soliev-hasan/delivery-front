@@ -13,6 +13,7 @@ export default StyleSheet.create({
 
   text: {
     color: colors.white,
+    fontSize: 18,
   },
   disabled: {
     backgroundColor: colors.gray,

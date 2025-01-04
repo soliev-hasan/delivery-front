@@ -30,6 +30,8 @@ const AuthContext = createContext({
   refreshToken: '',
   setRefreshToken: noop,
   logout: noop,
+  cart: '',
+  setCart: noop,
 });
 
 export default AuthContext;

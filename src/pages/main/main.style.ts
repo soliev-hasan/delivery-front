@@ -28,6 +28,7 @@ export default StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 12,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    justifyContent: 'space-between',
   },
   text: {
     color: colors.white,
@@ -82,6 +83,13 @@ export default StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 2,
+  },
+  rowMenu: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
+    marginLeft: -13,
   },
   button: {
     backgroundColor: colors.main,

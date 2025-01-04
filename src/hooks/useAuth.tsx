@@ -10,6 +10,7 @@ const useAuth = () => {
   const [address, setAddress] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<UserType | null>();
+  const [cart, setCart] = useState([]);
 
   async function logout() {
     await AsyncStorage.clear();
@@ -17,6 +18,7 @@ const useAuth = () => {
     setUser(null);
     setToken('');
   }
+
   async function fetch() {
     let token = await AsyncStorage.getItem('token');
     let refreshToken = await AsyncStorage.getItem('refreshToken');
@@ -46,6 +48,8 @@ const useAuth = () => {
     refreshToken,
     setRefreshToken,
     logout,
+    cart,
+    setCart,
   };
 };
 
