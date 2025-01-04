@@ -18,11 +18,15 @@ import colors from '../../helper/colors';
 import FastImage from 'react-native-fast-image';
 import {useModal} from '../../ui-components/modal/modal.hook';
 import {
+  Check,
   ChevronDown,
+  Circle,
+  CircleDot,
   MapPin,
   MoreVertical,
   Pen,
   Plus,
+  Square,
   Trash,
 } from 'lucide-react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
@@ -36,7 +40,7 @@ import cartActions from '../../store/cart/actions';
 
 const Main = ({navigation}: RootNavigationProps<'Main'>) => {
   const {sendRequest} = useApiRequest();
-  const {setUser, user, token, refreshToken, setCart, cart} =
+  const {setUser, user, token, refreshToken, setCart, setAddress, address} =
     useContext(AuthContext);
   const dispatch = useDispatch();
   const categories = useSelector(categoriesSelectors.allCategories);
@@ -76,6 +80,7 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
   const fetchCart = async () => {
     try {
       const cartData = await AsyncStorage.getItem('cart');
+
       if (cartData !== null) {
         setCart(JSON.parse(cartData));
       }
@@ -99,6 +104,24 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
     ]);
   }, [token, refreshToken]);
 
+  const fetchAddress = async () => {
+    const address = await AsyncStorage.getItem('address');
+    console.log();
+    if (address !== null) {
+      setAddress(JSON.parse(address));
+    } else {
+      setAddress(user.address[0]);
+    }
+  };
+
+  useEffect(() => {
+    fetchAddress();
+  }, [user]);
+
+  const handleSelectAddress = async () => {
+    await AsyncStorage.setItem('address', JSON.stringify(selectedAddress));
+    setAddress(selectedAddress);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -145,26 +168,28 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
           <Text style={styles.title}>Мои адреса</Text>
           <View style={styles.address}>
             {user &&
-              user.address.map(address => (
+              user.address.map(item => (
                 <View style={styles.row}>
+                  {address._id === item._id && <Check />}
+
                   <View>
                     <Text style={styles.street}>
-                      {address.city} {address.street}
+                      {item.city} {item.street}
                     </Text>
                     <Text style={styles.second}>
-                      кв {address.apartment} подъезд {address.entrance} этаж{' '}
-                      {address.floor}
+                      кв {item.apartment} подъезд {item.entrance} этаж{' '}
+                      {item.floor}
                     </Text>
                   </View>
                   <Menu
                     visible={visible}
                     anchor={
-                      loadingAddressId === address._id ? ( // Отображаем спиннер, если адрес удаляется
+                      loadingAddressId === item._id ? (
                         <ActivityIndicator size="small" color={colors.black} />
                       ) : (
                         <MoreVertical
                           onPress={() => {
-                            setSelectedAddress(address);
+                            setSelectedAddress(item);
                             showMenu();
                           }}
                         />
@@ -174,11 +199,20 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
                     <MenuItem
                       style={styles.menu}
                       onPress={() => {
+                        handleSelectAddress(address);
                         hideMenu();
-                        navigation.navigate('Map', {address: selectedAddress});
                       }}>
-                      <Pen style={{marginTop: -5, marginLeft: -5}} size={20} />{' '}
-                      Изменить
+                      {address === selectedAddress ? (
+                        <View style={styles.rowMenu}>
+                          <CircleDot />
+                          <Text>Выбрано</Text>
+                        </View>
+                      ) : (
+                        <View style={styles.rowMenu}>
+                          <Circle />
+                          <Text>Выбрать</Text>
+                        </View>
+                      )}
                     </MenuItem>
                     <MenuItem
                       style={styles.menu}
@@ -205,12 +239,8 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
               modal.close();
             }}
             disabled={true}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Plus
-                strokeWidth={2}
-                color={colors.black}
-                style={{marginTop: 12}}
-              />
+            <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+              <Plus strokeWidth={2} color={colors.black} />
               <Text style={[styles.text, {color: colors.black}]}>
                 Добавить новый адрес
               </Text>

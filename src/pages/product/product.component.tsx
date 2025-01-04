@@ -42,7 +42,7 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
   const dispatch = useDispatch();
   const handleIncrease = () => setQuantity(prev => prev + 1);
   const handleDecrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
-  const {cart, setCart} = useContext(AuthContext);
+  const {cart, setCart, token} = useContext(AuthContext);
 
   const saveCart = async () => {
     try {
@@ -84,7 +84,7 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
 
   useEffect(() => {
     getProduct(route.params.product._id);
-  }, []);
+  }, [token]);
 
   return (
     <SafeAreaView style={styles.container}>

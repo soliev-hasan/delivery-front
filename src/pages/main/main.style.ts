@@ -84,6 +84,13 @@ export default StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
   },
+  rowMenu: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
+    marginLeft: -13,
+  },
   button: {
     backgroundColor: colors.main,
     paddingVertical: 12,

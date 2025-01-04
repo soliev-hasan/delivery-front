@@ -22,14 +22,18 @@ import {useModal} from '../../ui-components/modal/modal.hook';
 import {ConfirmationModalize} from '../../ui-components/modal/confirmatin-modalize.component';
 import Illustration from '../../assets/icons/Illustration.svg';
 import {RootNavigationProps} from '../../navigation/navigation.types';
+
 const Cart = ({navigation}: RootNavigationProps<'Cart'>) => {
   const {cart, setCart} = useContext(AuthContext);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [total, setTotal] = useState([]);
   const modal = useModal();
+
   const saveCart = async updatedCart => {
     await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
     setCart(updatedCart);
   };
+
   const increaseQuantity = index => {
     const updatedCart = [...cart];
     updatedCart[index].quantity += 1;
@@ -50,34 +54,25 @@ const Cart = ({navigation}: RootNavigationProps<'Cart'>) => {
     const updatedCart = cart.filter((_, i) => i !== index);
     saveCart(updatedCart);
   };
-  // Функция для выбора/отмены выбора товара
+
   const toggleSelectItem = index => {
     if (selectedItems.includes(index)) {
       setSelectedItems(selectedItems.filter(item => item !== index));
+      setTotal(total.filter(item => item._id !== cart[index]._id));
     } else {
       setSelectedItems([...selectedItems, index]);
+      setTotal([...total, cart[index]]);
     }
   };
 
-  // Функция для подсчета общей суммы выбранных товаров
   const calculateTotal = () => {
-    return selectedItems.reduce((total, index) => {
-      const item = cart[index];
-      if (item) {
-        return total + item.price * item.quantity;
-      }
-      return total;
-    }, 0);
+    return total.reduce((sum, item) => sum + item.price * item.quantity, 0);
   };
+
   const calculateTotalQuantity = () => {
-    return selectedItems.reduce((total, index) => {
-      const item = cart[index];
-      if (item) {
-        return total + item.quantity;
-      }
-      return total;
-    }, 0);
+    return total.reduce((sum, item) => sum + item.quantity, 0);
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Корзина" />
@@ -112,7 +107,6 @@ const Cart = ({navigation}: RootNavigationProps<'Cart'>) => {
                 />
                 <View style={styles.desc}>
                   <Text style={styles.itemName}>{item.name}</Text>
-
                   <Text style={styles.itemPrice}>Цена: {item.price} c</Text>
                   <View style={styles.icons}>
                     <TouchableOpacity
@@ -158,8 +152,16 @@ const Cart = ({navigation}: RootNavigationProps<'Cart'>) => {
               <Text style={styles.num}>{calculateTotal()} c</Text>
             </View>
           </View>
-          <Button style={{margin: 20, width: '90%'}} disabled>
-            Оформить заказ
+          <Button
+            onPress={() =>
+              navigation.navigate('Payment', {
+                total: total,
+                totalPrice: calculateTotal(),
+              })
+            }
+            style={{margin: 20, width: '90%'}}
+            disabled>
+            Сохранить
           </Button>
         </>
       ) : (

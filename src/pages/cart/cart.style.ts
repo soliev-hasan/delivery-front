@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 18,
     fontWeight: 'bold',
+    width: 160,
   },
   itemQuantity: {
     fontSize: 18,

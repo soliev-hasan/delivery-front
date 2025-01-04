@@ -7,6 +7,7 @@ import BottomTabNavigation from './bottom-tab.navigation';
 import EditProfile from '../pages/profile/editProfile.component';
 import Map from '../ui-components/map/map.component';
 import ProductDetail from '../pages/product/product.component';
+import Payment from '../pages/payment/payment.component';
 
 const MainNavigation = () => {
   const Stack = createNativeStackNavigator<ScreensParams>();
@@ -39,6 +40,11 @@ const MainNavigation = () => {
       <Stack.Screen
         name="ProductDetail"
         component={ProductDetail}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Payment"
+        component={Payment}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
