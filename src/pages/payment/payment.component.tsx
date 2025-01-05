@@ -11,7 +11,6 @@ const Payment = ({navigation, route}: RootNavigationProps<'Payment'>) => {
   const {total, totalPrice} = route.params;
   const {user, address, token} = useContext(AuthContext);
   const {sendRequest} = useApiRequest();
-  console.log(token);
 
   const sendOrder = async () => {
     try {
@@ -41,7 +40,6 @@ const Payment = ({navigation, route}: RootNavigationProps<'Payment'>) => {
   };
 
   // Вызывайте эту функцию, например, при нажатии на кнопку:
-  <Button onPress={sendOrder}>Оформить заказ сейчас</Button>;
 
   return (
     <SafeAreaView style={styles.container}>

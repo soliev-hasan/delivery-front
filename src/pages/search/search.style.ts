@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import colors from '../../helper/colors';
 
 export default StyleSheet.create({
@@ -16,7 +16,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   productItem: {
-    width: 180,
+    width: Platform.OS === 'ios' ? 180 : 150,
     height: 200,
     alignItems: 'center',
     marginBottom: 15,

@@ -88,6 +88,11 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size={'large'} color={colors.main} />
+        </View>
+      )}
       <ScrollView>
         <Header backIcon title="Детали" />
         <View
@@ -196,11 +201,6 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
                 <Text style={styles.noSimilar}>Нет похожих товаров.</Text>
               )}
             </>
-          )}
-          {loading && (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size={'large'} color={colors.main} />
-            </View>
           )}
         </View>
       </ScrollView>

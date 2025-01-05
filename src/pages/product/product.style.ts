@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import colors from '../../helper/colors';
 
 export default StyleSheet.create({
@@ -82,7 +82,7 @@ export default StyleSheet.create({
   },
   cartSection: {
     position: 'absolute', // Закрепляем секцию
-    bottom: 30,
+    bottom: Platform.OS === 'ios' ? 30 : 0,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -200,7 +200,7 @@ export default StyleSheet.create({
     height: 60,
     left: '44%',
     top: '42%',
-    elevation: 3,
+    // elevation: 3,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: {width: 5, height: 5},

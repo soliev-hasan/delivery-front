@@ -26,6 +26,7 @@ export default StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: '600',
+    color: colors.black,
   },
   price: {
     fontSize: 16,
@@ -40,6 +41,7 @@ export default StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '600',
+    color: colors.black,
   },
   quantity: {
     color: colors.grayDark,
@@ -56,5 +58,6 @@ export default StyleSheet.create({
   },
   right: {
     fontSize: 18,
+    color: colors.black,
   },
 });

@@ -1,10 +1,10 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import colors from '../../helper/colors';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: Platform.OS === 'android' ? 0 : 20,
     backgroundColor: colors.white,
   },
   title: {
@@ -24,11 +24,13 @@ const styles = StyleSheet.create({
     elevation: 3,
     flexDirection: 'row',
     alignItems: 'center',
-    margin: 20,
+    margin: Platform.OS === 'ios' ? 20 : 5,
     justifyContent: 'space-between',
   },
   desc: {
     gap: 10,
+    marginLeft: Platform.OS === 'android' ? 10 : 0,
+    marginTop: Platform.OS === 'android' ? -40 : 0,
   },
   itemName: {
     fontSize: 18,
@@ -50,8 +52,9 @@ const styles = StyleSheet.create({
     color: colors.gray,
   },
   photo: {
-    width: 90,
-    height: 90,
+    width: Platform.OS === 'ios' ? 90 : 60,
+    height: Platform.OS === 'ios' ? 90 : 60,
+    marginLeft: Platform.OS === 'android' ? 10 : 0,
   },
   icons: {
     flexDirection: 'row',
@@ -83,6 +86,7 @@ const styles = StyleSheet.create({
   num: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: colors.main,
   },
   rowCalc: {
     flexDirection: 'row',

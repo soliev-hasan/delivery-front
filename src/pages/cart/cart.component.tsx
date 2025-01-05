@@ -5,6 +5,7 @@ import {
   FlatList,
   SafeAreaView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import styles from './cart.style';
@@ -28,6 +29,7 @@ const Cart = ({navigation}: RootNavigationProps<'Cart'>) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [total, setTotal] = useState([]);
   const modal = useModal();
+  const {user} = useContext(AuthContext);
 
   const saveCart = async updatedCart => {
     await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
@@ -110,13 +112,19 @@ const Cart = ({navigation}: RootNavigationProps<'Cart'>) => {
                   <Text style={styles.itemPrice}>Цена: {item.price} c</Text>
                   <View style={styles.icons}>
                     <TouchableOpacity
-                      onPress={() => decreaseQuantity(index)}
+                      onPress={() => {
+                        modal.close();
+                        decreaseQuantity(index);
+                      }}
                       style={styles.icon}>
                       <Minus color={colors.black} size={20} />
                     </TouchableOpacity>
                     <Text style={styles.itemQuantity}>{item.quantity}</Text>
                     <TouchableOpacity
-                      onPress={() => increaseQuantity(index)}
+                      onPress={() => {
+                        increaseQuantity(index);
+                        modal.close();
+                      }}
                       style={styles.icon}>
                       <Plus color={colors.black} size={20} />
                     </TouchableOpacity>
@@ -135,6 +143,7 @@ const Cart = ({navigation}: RootNavigationProps<'Cart'>) => {
                         />
                       ),
                       height: 250,
+                      scrolling: false,
                     });
                   }}>
                   <Trash color={colors.red} size={20} />
@@ -153,14 +162,18 @@ const Cart = ({navigation}: RootNavigationProps<'Cart'>) => {
             </View>
           </View>
           <Button
-            onPress={() =>
+            onPress={() => {
+              if (user.address.length === 0) {
+                Alert.alert('Ошибка', 'Добавьте адрес доставки');
+                return;
+              }
               navigation.navigate('Payment', {
                 total: total,
                 totalPrice: calculateTotal(),
-              })
-            }
+              });
+            }}
             style={{margin: 20, width: '90%'}}
-            disabled>
+            disabled={selectedItems.length > 0}>
             Сохранить
           </Button>
         </>

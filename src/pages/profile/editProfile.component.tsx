@@ -157,7 +157,7 @@ const EditProfile = ({
               editable={newUser ? true : false}
               value={phone ? phone : phoneNumber}
               showCountryCode={newUser ? true : false}
-              maxLength={9}
+              maxLength={13}
               onChangeText={(text: string) => setPhone(text)}
             />
           </View>

@@ -50,15 +50,12 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
   const [loadingAddressId, setLoadingAddressId] = useState(null);
   const ref = useRef();
 
-  const deleteAdress = async () => {
-    if (!selectedAddress) return;
-    setLoadingAddressId(selectedAddress._id);
+  const deleteAdress = async item => {
+    if (!item) return;
+    setLoadingAddressId(item._id);
 
     try {
-      const response = await sendRequest(
-        'delete',
-        `user/address/${selectedAddress._id}`,
-      );
+      const response = await sendRequest('delete', `user/address/${item._id}`);
       if (response.status === 200) {
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
@@ -118,10 +115,11 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
     fetchAddress();
   }, [user]);
 
-  const handleSelectAddress = async () => {
-    await AsyncStorage.setItem('address', JSON.stringify(selectedAddress));
-    setAddress(selectedAddress);
+  const handleSelectAddress = async address => {
+    await AsyncStorage.setItem('address', JSON.stringify(address));
+    setAddress(address);
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -169,62 +167,39 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
           <View style={styles.address}>
             {user &&
               user.address.map(item => (
-                <View style={styles.row}>
-                  {address._id === item._id && <Check />}
+                <TouchableOpacity
+                  onPress={() => handleSelectAddress(item)}
+                  style={styles.row}>
+                  <TouchableOpacity>
+                    {address._id === item._id ? (
+                      <View style={styles.rowMenu}>
+                        <CircleDot />
+                      </View>
+                    ) : (
+                      <View style={styles.rowMenu}>
+                        <Circle />
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                  {/* {address._id === item._id && <Check />} */}
 
                   <View>
-                    <Text style={styles.street}>
-                      {item.city} {item.street}
+                    <Text numberOfLines={2} style={styles.street}>
+                      {item.city}, {item.street}
                     </Text>
                     <Text style={styles.second}>
                       кв {item.apartment} подъезд {item.entrance} этаж{' '}
                       {item.floor}
                     </Text>
                   </View>
-                  <Menu
-                    visible={visible}
-                    anchor={
-                      loadingAddressId === item._id ? (
-                        <ActivityIndicator size="small" color={colors.black} />
-                      ) : (
-                        <MoreVertical
-                          onPress={() => {
-                            setSelectedAddress(item);
-                            showMenu();
-                          }}
-                        />
-                      )
-                    }
-                    onRequestClose={hideMenu}>
-                    <MenuItem
-                      style={styles.menu}
-                      onPress={() => {
-                        handleSelectAddress(address);
-                        hideMenu();
-                      }}>
-                      {address === selectedAddress ? (
-                        <View style={styles.rowMenu}>
-                          <CircleDot />
-                          <Text>Выбрано</Text>
-                        </View>
-                      ) : (
-                        <View style={styles.rowMenu}>
-                          <Circle />
-                          <Text>Выбрать</Text>
-                        </View>
-                      )}
-                    </MenuItem>
-                    <MenuItem
-                      style={styles.menu}
-                      onPress={() => {
-                        deleteAdress();
-                        hideMenu();
-                      }}>
+                  <TouchableOpacity onPress={() => deleteAdress(item)}>
+                    {loadingAddressId === item._id ? (
+                      <ActivityIndicator size="small" color={colors.black} />
+                    ) : (
                       <Trash style={{marginTop: -5}} size={20} />
-                      Удалить
-                    </MenuItem>
-                  </Menu>
-                </View>
+                    )}
+                  </TouchableOpacity>
+                </TouchableOpacity>
               ))}
           </View>
 

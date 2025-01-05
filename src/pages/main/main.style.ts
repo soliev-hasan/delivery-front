@@ -50,6 +50,7 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: colors.black,
+    width: 160,
   },
   second: {
     fontSize: 14,
@@ -101,5 +102,8 @@ export default StyleSheet.create({
     color: colors.white,
     fontSize: 16,
     fontWeight: '700',
+  },
+  textMenu: {
+    color: colors.black,
   },
 });

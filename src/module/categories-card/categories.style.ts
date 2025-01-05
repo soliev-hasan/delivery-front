@@ -6,6 +6,7 @@ export default StyleSheet.create({
     fontSize: 22,
     fontWeight: '600',
     marginBottom: 15,
+    color: colors.black,
   },
   card: {
     backgroundColor: '#f6f6f6',

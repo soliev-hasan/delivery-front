@@ -1,4 +1,4 @@
-import {Alert, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {Alert, Modal, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useState} from 'react';
 import MapView, {Marker, UrlTile} from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
@@ -158,7 +158,7 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={StyleSheet.absoluteFillObject}>
       <View style={styles.back}>
         <BackIcon />
       </View>
@@ -183,7 +183,7 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
             description={`Широта: ${marker.latitude}, Долгота: ${marker.longitude}`}
           />
         )}
-        <GooglePlacesAutocomplete
+        {/* <GooglePlacesAutocomplete
           placeholder="Введите адрес"
           minLength={2}
           fetchDetails={true}
@@ -248,7 +248,7 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
               marginTop: 10,
             },
           }}
-        />
+        /> */}
       </MapView>
 
       <View style={styles.modal}>
@@ -256,6 +256,7 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
         <View style={styles.modalContent}>
           <Input
             placeholder="Подъезд"
+            placeholderTextColor={colors.grayDark}
             value={formData.entrance}
             onChangeText={text =>
               setFormData(prevState => ({...prevState, entrance: text}))
@@ -270,6 +271,8 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
               setFormData(prevState => ({...prevState, floor: text}))
             }
             showCountryCode={false}
+            wrapperStyle={{color: colors.black}}
+            placeholderTextColor={colors.grayDark}
           />
 
           <Input
@@ -279,6 +282,7 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
               setFormData(prevState => ({...prevState, apartment: text}))
             }
             showCountryCode={false}
+            placeholderTextColor={colors.grayDark}
           />
 
           <Input
@@ -288,6 +292,7 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
               setFormData(prevState => ({...prevState, house: text}))
             }
             showCountryCode={false}
+            placeholderTextColor={colors.grayDark}
           />
 
           <Button loading={loading} disabled={true} onPress={handleSave}>

@@ -28,7 +28,7 @@ function App() {
 
   const getToken = async () => {
     const token = await messaging().getToken();
-    console.log('Token:', token);
+    // console.log('Token:', token);
   };
 
   useEffect(() => {
