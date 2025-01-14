@@ -1170,6 +1170,29 @@ PODS:
   - RNGoogleSignin (13.1.0):
     - GoogleSignIn (~> 7.1)
     - React-Core
+  - RNReanimated (3.16.3):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
+    - RNReanimated/reanimated (= 3.16.3)
+    - RNReanimated/worklets (= 3.16.3)
+  - RNReanimated/reanimated (3.16.3):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
+    - RNReanimated/reanimated/apple (= 3.16.3)
+  - RNReanimated/reanimated/apple (3.16.3):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
+  - RNReanimated/worklets (3.16.3):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
   - RNScreens (4.3.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1247,6 +1270,7 @@ DEPENDENCIES:
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -1390,6 +1414,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSVG:
@@ -1472,6 +1498,7 @@ SPEC CHECKSUMS:
   RNFBMessaging: 3b6af169c3caf08af40ca79fa4bdc422c3f1a10c
   RNGestureHandler: bbb04bccfd972fc228f7307815ccd11f47324605
   RNGoogleSignin: 9e68b9bcc3888219357924e32ee563624745647d
+  RNReanimated: 46456247ef9b31f14d8ca6899b28d794468482c0
   RNScreens: 9413a08c0d0ecef3eecf5a1f79db42929cef055c
   RNSVG: 3d2bdcaef51c8071880a9c0072fe324f4423a3ba
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d

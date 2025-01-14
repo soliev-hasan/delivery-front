@@ -9,6 +9,7 @@ import Map from '../ui-components/map/map.component';
 import ProductDetail from '../pages/product/product.component';
 import SubCategory from '../pages/subcategory/subcategory.component';
 import Payment from '../pages/payment/payment.component';
+import MyOrders from '../pages/my-orders/my-orders.component';
 
 const MainNavigation = () => {
   const Stack = createNativeStackNavigator<ScreensParams>();
@@ -51,7 +52,12 @@ const MainNavigation = () => {
       <Stack.Screen
         name="SubCategory"
         component={SubCategory}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="MyOrders"
+        component={MyOrders}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );

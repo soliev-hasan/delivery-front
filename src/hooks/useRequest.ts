@@ -32,8 +32,6 @@ export const useApiRequest = () => {
         if (method === 'get') {
           response = await axios.get(url, {headers, params: requestData});
         } else if (method === 'post') {
-          console.log(url);
-
           response = await axios.post(url, requestData, {headers});
         } else if (method === 'put') {
           (headers as Record<string, string>)['Content-Type'] =
@@ -73,7 +71,7 @@ export const useApiRequest = () => {
         setLoading(false);
       }
     },
-    [token],
+    [token, refreshToken],
   );
 
   return {sendRequest, loading, error, data};

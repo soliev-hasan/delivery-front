@@ -68,7 +68,7 @@ export default StyleSheet.create({
   tabsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 25
+    marginBottom: 25,
   },
   tab: {
     paddingVertical: 8,
@@ -106,5 +106,60 @@ export default StyleSheet.create({
   orderText: {
     fontSize: 16,
     color: '#fff',
+  },
+  recommendedContainer: {
+    marginTop: 20,
+  },
+  recommendedProducts: {
+    paddingBottom: 16,
+  },
+  scrollContainer: {
+    paddingBottom: 20,
+  },
+  recommendedItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    marginBottom: 10,
+    borderRadius: 10,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  recommendedImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 8,
+    marginRight: 10,
+  },
+  recommendedInfo: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  recommendedName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  recommendedCategory: {
+    fontSize: 14,
+    color: '#666',
+  },
+  recommendedDetails: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+    gap: 10,
+  },
+  recommendedRating: {
+    fontSize: 12,
+    color: '#333',
+  },
+  recommendedDistance: {
+    fontSize: 12,
+    color: '#666',
   },
 });

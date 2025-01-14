@@ -1,5 +1,12 @@
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useContext} from 'react';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
 import styles from './payment.style';
 import {RootNavigationProps} from '../../navigation/navigation.types';
 import {Header} from '../../ui-components/header/header.component';
@@ -7,39 +14,60 @@ import FastImage from 'react-native-fast-image';
 import AuthContext from '../../contexts/AuthContext';
 import {Button} from '../../ui-components/button/button.component';
 import {useApiRequest} from '../../hooks/useRequest';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import {Input} from '../../ui-components/input/input.component';
+import colors from '../../helper/colors';
 const Payment = ({navigation, route}: RootNavigationProps<'Payment'>) => {
   const {total, totalPrice} = route.params;
   const {user, address, token} = useContext(AuthContext);
   const {sendRequest} = useApiRequest();
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [order, setOrder] = useState([]);
 
   const sendOrder = async () => {
     try {
+      setLoading(true);
       const products = total.map(product => ({
-        productId: product._id, // Используем _id продукта
+        productId: product._id,
         quantity: product.quantity,
       }));
-      console.log(products);
-
-      const requestBody = {
-        products,
-        comment: 'leave at the door pls', // Ваш комментарий
-      };
 
       const response = await sendRequest('post', 'order', {
-        body: JSON.stringify(requestBody),
+        products: products,
+        comment: message,
       });
 
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: 'Успешно',
+        textBody: 'Ваш заказ успешно оформлен! 🎉',
+      });
+      setMessage('');
+      setLoading(false);
+      navigation.navigate('BottomTab');
       if (response.status === 200) {
         console.log('Order sent successfully:', response.data);
       } else {
-        console.error('Failed to send order:', response.status);
+        console.log('Failed to send order:', response.data.error);
       }
     } catch (error) {
-      console.error('Error sending order:', error);
+      console.log('Error sending order:', error);
     }
   };
 
-  // Вызывайте эту функцию, например, при нажатии на кнопку:
+  useEffect(() => {
+    const products = total.map(product => ({
+      productId: product._id,
+      quantity: product.quantity,
+    }));
+    sendRequest('post', 'order/details', {
+      products: products,
+    })
+      .then(res => setOrder(res.data))
+      .finally(() => setLoading(false));
+  }, [token]);
+  console.log('order', order);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -70,11 +98,31 @@ const Payment = ({navigation, route}: RootNavigationProps<'Payment'>) => {
             );
           })}
           <View>
-            <Text style={styles.title}>Детали заказа</Text>
-            <View style={styles.row}>
-              <Text style={styles.total}>Итог </Text>
-              <Text style={styles.price}>{totalPrice} c</Text>
-            </View>
+            {loading ? (
+              <ActivityIndicator color={colors.main} size={'large'} />
+            ) : (
+              <>
+                <Text style={styles.title}>Детали заказа</Text>
+                <View style={styles.row}>
+                  <Text style={styles.total}>Цена доставки </Text>
+                  <Text style={styles.price}>
+                    {parseInt(totalPrice - order.details.deliveryAmount)} c
+                  </Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.total}>Цена товара </Text>
+                  <Text style={styles.price}>
+                    {order.details.orderAmount} c
+                  </Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.total}>Итог </Text>
+                  <Text style={styles.price}>
+                    {parseInt(order.details.deliveryAmount)} c
+                  </Text>
+                </View>
+              </>
+            )}
             <View style={{marginTop: 15}}>
               <Text style={styles.title}>Доставить по адресу :</Text>
 
@@ -105,8 +153,15 @@ const Payment = ({navigation, route}: RootNavigationProps<'Payment'>) => {
                 <Text style={styles.right}>{address.house}</Text>
               </View>
             </View>
+            <Input
+              showCountryCode={false}
+              placeholder="Комментарие"
+              wrapperStyle={{marginTop: 10}}
+              onChangeText={setMessage}
+              value={message}
+            />
           </View>
-          <Button onPress={sendOrder} disabled>
+          <Button onPress={sendOrder} disabled loading={loading}>
             Оформить заказ сейчас
           </Button>
         </View>

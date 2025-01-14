@@ -1,5 +1,5 @@
-import { RouteProp } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {RouteProp} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export type ScreensParams = {
   Otp: undefined;
@@ -20,10 +20,12 @@ export type ScreensParams = {
     categoryId: string;
     subcategoryId: string;
     title: string;
-  }
+  };
   Payment: {
     total: any;
+    totalPrice: any;
   };
+  MyOrders: undefined;
 };
 
 export type RootRouteProps<RouteName extends keyof ScreensParams> = RouteProp<

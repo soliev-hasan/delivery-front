@@ -1,37 +1,31 @@
-import React, {useContext, useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-  FlatList,
-  ScrollView,
-  SafeAreaView,
-  Alert,
-} from 'react-native';
-import Swiper from 'react-native-swiper';
-import {
+  Clock8,
   MinusCircle,
   PlusCircle,
-  DollarSign,
-  Clock8,
-  Star,
   ShoppingCart,
+  Star,
 } from 'lucide-react-native';
-import {Header} from '../../ui-components/header/header.component';
-import {RootNavigationProps} from '../../navigation/navigation.types';
-import {DEVELOP_URL} from '../../helper/helper';
-import colors from '../../helper/colors';
-import {useApiRequest} from '../../hooks/useRequest';
-import styles from './product.style';
-import {useDispatch, useSelector} from 'react-redux';
-import cartActions from '../../store/cart/actions';
-import cartSelectors from '../../store/cart/selectors';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import Swiper from 'react-native-swiper';
 import AuthContext from '../../contexts/AuthContext';
+import colors from '../../helper/colors';
+import {DEVELOP_URL} from '../../helper/helper';
+import {useApiRequest} from '../../hooks/useRequest';
+import {RootNavigationProps} from '../../navigation/navigation.types';
+import {Header} from '../../ui-components/header/header.component';
+import styles from './product.style';
 
 const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
   const [quantity, setQuantity] = useState(1);
@@ -39,7 +33,6 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
   const [similarProducts, setSimilarProducts] = useState([]);
   const BASE_URL = `${DEVELOP_URL}/api/`;
   const {sendRequest, loading} = useApiRequest();
-  const dispatch = useDispatch();
   const handleIncrease = () => setQuantity(prev => prev + 1);
   const handleDecrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
   const {cart, setCart, token} = useContext(AuthContext);
@@ -81,6 +74,25 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
       ),
     ]);
   };
+  // Функция удаления из корзины
+  const removeFromCart = async () => {
+    try {
+      const updatedCart = cart.filter(item => item._id !== product._id);
+      await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
+      setCart(updatedCart);
+
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: 'Успешно',
+        textBody: 'Удалено из корзины',
+      });
+    } catch (error) {
+      console.error('Failed to remove from cart', error);
+    }
+  };
+
+  // Проверяем, добавлен ли товар в корзину
+  const isInCart = cart.some(item => item._id === product._id);
 
   useEffect(() => {
     getProduct(route.params.product._id);
@@ -205,22 +217,38 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
         </View>
       </ScrollView>
       <View style={styles.cartSection}>
-        <View style={styles.quantityControls}>
-          <TouchableOpacity activeOpacity={0.8} onPress={handleDecrease}>
-            <MinusCircle size={40} color="#FE8C00" />
+        {!isInCart && (
+          <View style={styles.quantityControls}>
+            <TouchableOpacity activeOpacity={0.8} onPress={handleDecrease}>
+              <MinusCircle size={40} color="#FE8C00" />
+            </TouchableOpacity>
+            <Text style={styles.quantityText}>{quantity}</Text>
+            <TouchableOpacity activeOpacity={0.8} onPress={handleIncrease}>
+              <PlusCircle size={40} color="#FE8C00" />
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {isInCart ? (
+          <TouchableOpacity
+            onPress={removeFromCart}
+            activeOpacity={0.8}
+            style={[
+              styles.button,
+              {backgroundColor: 'red', width: '100%', justifyContent: 'center'},
+            ]}>
+            <ShoppingCart size={20} color="#fff" style={styles.icon} />
+            <Text style={[styles.buttonText]}>Удалить</Text>
           </TouchableOpacity>
-          <Text style={styles.quantityText}>{quantity}</Text>
-          <TouchableOpacity activeOpacity={0.8} onPress={handleIncrease}>
-            <PlusCircle size={40} color="#FE8C00" />
+        ) : (
+          <TouchableOpacity
+            onPress={saveCart}
+            activeOpacity={0.8}
+            style={styles.button}>
+            <ShoppingCart size={20} color="#fff" style={styles.icon} />
+            <Text style={styles.buttonText}>В корзину</Text>
           </TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          onPress={saveCart}
-          activeOpacity={0.8}
-          style={styles.button}>
-          <ShoppingCart size={20} color="#fff" style={styles.icon} />
-          <Text style={styles.buttonText}>В корзину</Text>
-        </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );

@@ -1,27 +1,27 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import colors from '../../helper/colors';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 16,
   },
   header: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 16,
   },
   row: {
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   productCard: {
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
     borderRadius: 8,
     padding: 16,
     marginBottom: 16,
-    width: "48%",
-    alignItems: "center",
+    width: '48%',
+    alignItems: 'center',
   },
   productImage: {
     width: 100,
@@ -30,40 +30,46 @@ export default StyleSheet.create({
   },
   productName: {
     fontSize: 14,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
     marginBottom: 4,
   },
   productWeight: {
     fontSize: 12,
-    color: "#888",
+    color: '#888',
     marginBottom: 4,
   },
   productTag: {
     fontSize: 12,
-    color: "green",
+    color: 'green',
     marginBottom: 8,
   },
   priceContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
   },
   productPrice: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   addButton: {
-    backgroundColor: "#ff5c5c",
+    backgroundColor: '#ff5c5c',
     borderRadius: 16,
     padding: 4,
     width: 32,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   addButtonText: {
     fontSize: 18,
-    color: "#fff",
+    color: '#fff',
+  },
+  spinner: {
+    position: 'absolute',
+    top: '50%',
+    left: '45%',
+    flex: 1,
   },
 });

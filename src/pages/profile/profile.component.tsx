@@ -19,9 +19,11 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../../navigation/navigation.types';
 import {DEVELOP_URL} from '../../helper/helper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useApiRequest} from '../../hooks/useRequest';
 
 const Profile = ({navigation}: RootNavigationProps<'Profile'>) => {
-  const {user, setToken, logout} = useContext(AuthContext);
+  const {user, logout} = useContext(AuthContext);
+  const {sendRequest} = useApiRequest();
 
   const options = [
     {
@@ -36,10 +38,16 @@ const Profile = ({navigation}: RootNavigationProps<'Profile'>) => {
       icon: SVGSettings,
       onPress: () => console.log('Профиль'),
     },
-    {id: 3, name: 'Помощь', icon: SVGSettings, onPress: () => console.log('')},
-    {id: 4, name: 'О нас', icon: SVGSettings, onPress: () => console.log('')},
     {
-      id: 5,
+      id: 3,
+      name: 'Мои заказы',
+      icon: SVGSettings,
+      onPress: () => navigation.navigate('MyOrders'),
+    },
+    {id: 4, name: 'Помощь', icon: SVGSettings, onPress: () => console.log('')},
+    {id: 5, name: 'О нас', icon: SVGSettings, onPress: () => console.log('')},
+    {
+      id: 6,
       name: 'Контакты',
       icon: SVGSettings,
       onPress: () => console.log(''),
@@ -97,7 +105,9 @@ const Profile = ({navigation}: RootNavigationProps<'Profile'>) => {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={async () => {
+            await sendRequest('post', '/auth/logout');
             logout();
+
             navigation.navigate('SignUp');
           }}
           style={styles.exitBtn}>

@@ -71,9 +71,6 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
     }
   };
 
-  const hideMenu = () => setVisible(false);
-  const showMenu = () => setVisible(true);
-
   const fetchCart = async () => {
     try {
       const cartData = await AsyncStorage.getItem('cart');
@@ -99,11 +96,10 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
 
         .catch(e => console.log()),
     ]);
-  }, [token, refreshToken]);
+  }, [token]);
 
   const fetchAddress = async () => {
     const address = await AsyncStorage.getItem('address');
-    console.log();
     if (address !== null) {
       setAddress(JSON.parse(address));
     } else {
