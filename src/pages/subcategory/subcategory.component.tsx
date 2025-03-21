@@ -2,79 +2,91 @@ import React, {useContext, useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
-  FlatList,
+  SectionList,
   Image,
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
   ActivityIndicator,
+  FlatList,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from 'react-native';
 import {Header} from '../../ui-components/header/header.component';
-import {useDispatch, useSelector} from 'react-redux';
-import subcategoriesSelectors from '../../store/subcategories/selectors';
-import {useApiRequest} from '../../hooks/useRequest';
+import {useDispatch} from 'react-redux';
 import subcategoriesActions from '../../store/subcategories/actions';
-import {DEVELOP_URL} from '../../helper/helper';
-import styles from './subcategory.style';
-import {useNavigation} from '@react-navigation/native';
+import {useApiRequest} from '../../hooks/useRequest';
 import colors from '../../helper/colors';
 import AuthContext from '../../contexts/AuthContext';
 import {RootNavigationProps} from '../../navigation/navigation.types';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Minus, Plus} from 'lucide-react-native';
+import {useNavigation} from '@react-navigation/native';
+import styles from './subcategory.style';
+
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+const chunkArray = (array, chunkSize) => {
+  const results = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    results.push(array.slice(i, i + chunkSize));
+  }
+  return results;
+};
 
 const SubCategory = ({route}: RootNavigationProps<'SubCategory'>) => {
-  const {categoryId, subcategoryId, title} = route.params;
+  const {subcategoryId, title} = route.params;
   const {sendRequest} = useApiRequest();
   const dispatch = useDispatch();
   const {token, cart, setCart} = useContext(AuthContext);
-  const subcategories = useSelector(subcategoriesSelectors.allSubcategories);
-  const [loading, setLoading] = useState(false);
-  const [chapters, setChapters] = useState([]);
-  const [activeChapterId, setActiveChapterId] = useState(null);
-  const BASE_URL = `${DEVELOP_URL}/api/`;
   const navigation = useNavigation();
 
-  const productListRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const [structuredData, setStructuredData] = useState([]);
+  const [activeChapterId, setActiveChapterId] = useState(null);
 
-  const fetchSubcategories = async () => {
+  const sectionListRef = useRef(null);
+
+  const fetchStructuredProducts = async () => {
     try {
       const response = await sendRequest('get', 'product/structured', {
         subcategoryId,
       });
+      const sections = (response.data || []).map(section => ({
+        ...section,
+        data: chunkArray(section.products || [], 2),
+      }));
+      setStructuredData(sections);
+      if (sections.length > 0) {
+        setActiveChapterId(sections[0].chapterId);
+      }
+      setLoading(true);
       const allProducts = response.data.flatMap(group => group.products);
       dispatch(subcategoriesActions.saveSubcategories(allProducts));
-      setLoading(true);
-      console.log(allProducts, 'PRODUCTS');
     } catch (error) {
-      console.error('Error fetching subcategories:', error);
+      console.error('Error fetching structured products:', error);
     }
   };
 
-  const fetchChapters = async () => {
-    try {
-      const response = await sendRequest('get', 'chapter', {
-        subcategoryid: subcategoryId,
-      });
-      const chaptersData = response.data || [];
-      setChapters(chaptersData);
-      if (chaptersData.length > 0) {
-        setActiveChapterId(chaptersData[0]._id);
-      }
-    } catch (error) {
-      console.error('Error fetching chapters:', error);
-    }
-  };
+  useEffect(() => {
+    fetchStructuredProducts();
+  }, [token]);
 
   const saveCart = async (item: any) => {
     try {
       const existingCart = await AsyncStorage.getItem('cart');
-      let cart = existingCart ? JSON.parse(existingCart) : [];
-      if (!Array.isArray(cart)) {
-        cart = [];
+      let cartData = existingCart ? JSON.parse(existingCart) : [];
+      if (!Array.isArray(cartData)) {
+        cartData = [];
       }
-      const updatedCart = [...cart, {...item, quantity: 1}];
+      const updatedCart = [...cartData, {...item, quantity: 1}];
       await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
       setCart(updatedCart);
       Toast.show({
@@ -90,11 +102,13 @@ const SubCategory = ({route}: RootNavigationProps<'SubCategory'>) => {
   const removeFromCart = async (item: any) => {
     try {
       const existingCart = await AsyncStorage.getItem('cart');
-      let cart = existingCart ? JSON.parse(existingCart) : [];
-      if (!Array.isArray(cart)) {
-        cart = [];
+      let cartData = existingCart ? JSON.parse(existingCart) : [];
+      if (!Array.isArray(cartData)) {
+        cartData = [];
       }
-      const updatedCart = cart.filter(cartItem => cartItem._id !== item._id);
+      const updatedCart = cartData.filter(
+        cartItem => cartItem._id !== item._id,
+      );
       await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
       setCart(updatedCart);
       Toast.show({
@@ -107,11 +121,6 @@ const SubCategory = ({route}: RootNavigationProps<'SubCategory'>) => {
     }
   };
 
-  useEffect(() => {
-    fetchSubcategories();
-    fetchChapters();
-  }, [token]);
-
   const isInCart = (item: any) => {
     return cart.some(cartItem => cartItem._id === item._id);
   };
@@ -120,27 +129,27 @@ const SubCategory = ({route}: RootNavigationProps<'SubCategory'>) => {
     const productInCart = isInCart(item);
     return (
       <TouchableOpacity
-        style={styles.productCard}
+        style={localStyles.productCard}
         onPress={() => navigation.navigate('ProductDetail', {product: item})}>
         <Image
           source={{
             uri: 'https://media.istockphoto.com/id/1309352410/ru/%D1%84%D0%BE%D1%82%D0%BE/%D1%87%D0%B8%D0%B7%D0%B1%D1%83%D1%80%D0%B3%D0%B5%D1%80-%D1%81-%D0%BF%D0%BE%D0%BC%D0%B8%D0%B4%D0%BE%D1%80%D0%B0%D0%BC%D0%B8-%D0%B8-%D1%81%D0%B0%D0%BB%D0%B0%D1%82%D0%BE%D0%BC-%D0%BD%D0%B0-%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D1%8F%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B4%D0%BE%D1%81%D0%BA%D0%B5.jpg?s=612x612&w=0&k=20&c=dW1Aguo-4PEcRs79PUbmMXpx5YrBjqSYiEhwnddbj_g=',
           }}
-          style={styles.productImage}
+          style={localStyles.productImage}
         />
-        <Text style={styles.productName}>{item.name}</Text>
-        <View style={styles.priceContainer}>
-          <Text style={styles.productPrice}>{item.price} смн.</Text>
+        <Text style={localStyles.productName}>{item.name}</Text>
+        <View style={localStyles.priceContainer}>
+          <Text style={localStyles.productPrice}>{item.price} смн.</Text>
           {productInCart ? (
             <TouchableOpacity
               onPress={() => removeFromCart(item)}
-              style={styles.addButton}>
+              style={localStyles.addButton}>
               <Minus color={colors.black} />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
               onPress={() => saveCart(item)}
-              style={styles.addButton}>
+              style={localStyles.addButton}>
               <Plus color={colors.white} />
             </TouchableOpacity>
           )}
@@ -149,56 +158,58 @@ const SubCategory = ({route}: RootNavigationProps<'SubCategory'>) => {
     );
   };
 
-  const handleChapterPress = chapterId => {
-    setActiveChapterId(chapterId);
+  const renderSectionHeader = ({section}) => (
+    <View style={localStyles.chapterHeaderContainer}>
+      <Text style={localStyles.chapterHeaderText}>{section.chapterName}</Text>
+    </View>
+  );
 
-    if (!productListRef.current) return;
-
-    let index = subcategories.subcategories.findIndex(
-      product => product.chapterId && product.chapterId._id === chapterId,
+  const renderSectionItem = ({item: rowProducts}) => {
+    return (
+      <View style={localStyles.rowContainer}>
+        {rowProducts.map((product, index) => (
+          <View
+            key={product._id || index.toString()}
+            style={localStyles.productWrapper}>
+            {renderProduct({item: product})}
+          </View>
+        ))}
+        {rowProducts.length < 2 && <View style={localStyles.productWrapper} />}
+      </View>
     );
+  };
 
-    // Проверяем, что индекс в допустимых пределах
-    if (index < 0) {
-      console.warn(`Глава не найдена, скроллим в начало`);
-      productListRef.current.scrollToOffset({offset: 0, animated: true});
-      return;
-    }
-
-    if (index >= subcategories.subcategories.length) {
-      console.warn(`Индекс ${index} выходит за границы, скроллим в конец.`);
-      productListRef.current.scrollToEnd({animated: true});
-      return;
-    }
-
-    // Прокручиваем до найденного индекса с обработкой ошибок
-    try {
-      productListRef.current.scrollToIndex({index, animated: true});
-    } catch (error) {
-      console.error(`Ошибка при скролле к индексу ${index}:`, error);
-      productListRef.current.scrollToEnd({animated: true});
+  const handleChapterPress = chapterId => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setActiveChapterId(chapterId);
+    const sectionIndex = structuredData.findIndex(
+      sec => sec.chapterId === chapterId,
+    );
+    if (sectionIndex >= 0 && sectionListRef.current) {
+      sectionListRef.current.scrollToLocation({
+        sectionIndex,
+        itemIndex: 0,
+        animated: true,
+      });
     }
   };
 
-  const renderChapter = ({item, index}) => {
-    const isActive = item._id === activeChapterId;
+  const renderChapterItem = ({item, index}) => {
+    const isActive = item.chapterId === activeChapterId;
     return (
       <TouchableOpacity
-        onPress={() => handleChapterPress(item._id)}
         style={[
           localStyles.chapterItem,
-          isActive
-            ? localStyles.activeChapterItem
-            : localStyles.inactiveChapterItem,
+          isActive && localStyles.chapterItemActive,
         ]}
-        // Используем item._id или индекс как ключ
-        key={item._id ? item._id.toString() : index.toString()}>
+        onPress={() => handleChapterPress(item.chapterId)}
+        key={item.chapterId ? item.chapterId.toString() : index.toString()}>
         <Text
           style={[
-            localStyles.chapterText,
-            isActive && localStyles.activeChapterText,
+            localStyles.chapterItemText,
+            isActive && localStyles.chapterItemTextActive,
           ]}>
-          {item.name}
+          {item.chapterName}
         </Text>
       </TouchableOpacity>
     );
@@ -207,34 +218,30 @@ const SubCategory = ({route}: RootNavigationProps<'SubCategory'>) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header backIcon title={title} />
-      {chapters.length > 0 && (
+      {structuredData.length > 0 && (
         <View style={localStyles.chaptersContainer}>
           <FlatList
-            data={chapters}
+            data={structuredData}
             horizontal
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item, index) =>
-              item._id ? item._id.toString() : index.toString()
+              item.chapterId ? item.chapterId.toString() : index.toString()
             }
-            renderItem={renderChapter}
+            renderItem={renderChapterItem}
             contentContainerStyle={{paddingHorizontal: 10}}
           />
         </View>
       )}
-      {subcategories.subcategories.length > 0 && loading ? (
-        <FlatList
-          ref={productListRef}
-          data={subcategories.subcategories}
+      {loading ? (
+        <SectionList
+          ref={sectionListRef}
+          sections={structuredData}
           keyExtractor={(item, index) =>
             item._id ? item._id.toString() : index.toString()
           }
-          renderItem={renderProduct}
-          numColumns={2}
-          columnWrapperStyle={styles.row}
-          style={{marginTop: 20}}
-          onScrollToIndexFailed={info => {
-            console.warn('Не удалось прокрутить к индексу', info);
-          }}
+          renderSectionHeader={renderSectionHeader}
+          renderItem={renderSectionItem}
+          contentContainerStyle={{paddingHorizontal: 10, paddingVertical: 10}}
         />
       ) : (
         <View style={styles.spinner}>
@@ -253,21 +260,70 @@ const localStyles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 15,
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f5f5',
     marginRight: 10,
   },
-  activeChapterItem: {
+  chapterItemActive: {
     backgroundColor: colors.main,
   },
-  chapterText: {
+  chapterItemText: {
     fontSize: 14,
     color: '#000',
   },
-  activeChapterText: {
+  chapterItemTextActive: {
     color: '#fff',
   },
-  inactiveChapterItem: {
+  chapterHeaderContainer: {
     backgroundColor: '#fff',
+    paddingVertical: 10,
+  },
+  chapterHeaderText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#000',
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 15,
+  },
+  productWrapper: {
+    flex: 1,
+    marginHorizontal: 5,
+  },
+  productCard: {
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
+    overflow: 'hidden',
+    alignItems: 'center',
+    padding: 10,
+  },
+  productImage: {
+    width: '100%',
+    height: 150,
+    resizeMode: 'cover',
+  },
+  productName: {
+    marginVertical: 10,
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#000',
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  productPrice: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  addButton: {
+    padding: 5,
+    borderRadius: 100,
+    backgroundColor: colors.main,
   },
 });
 
