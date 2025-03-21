@@ -24,14 +24,16 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   productImage: {
-    width: 100,
+    width: '100%',
     height: 100,
     marginBottom: 8,
+    borderRadius: 8,
   },
   productName: {
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+    color: 'black',
     marginBottom: 4,
   },
   productWeight: {
@@ -53,6 +55,7 @@ export default StyleSheet.create({
   productPrice: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: 'black',
   },
   addButton: {
     backgroundColor: '#ff5c5c',

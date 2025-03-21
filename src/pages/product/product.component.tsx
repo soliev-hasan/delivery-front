@@ -98,6 +98,8 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
     getProduct(route.params.product._id);
   }, [token]);
 
+  
+
   return (
     <SafeAreaView style={styles.container}>
       {loading && (

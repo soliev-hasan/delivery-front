@@ -1,28 +1,24 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Check, Minus, Plus, Trash } from 'lucide-react-native';
+import React, { useContext, useState } from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
+  Alert,
   FlatList,
   SafeAreaView,
+  Text,
   TouchableOpacity,
-  Alert,
+  View
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import styles from './cart.style';
-import {useDispatch, useSelector} from 'react-redux';
-import cartSelectors from '../../store/cart/selectors';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import cartActions from '../../store/cart/actions';
-import AuthContext from '../../contexts/AuthContext';
-import {Header} from '../../ui-components/header/header.component';
 import FastImage from 'react-native-fast-image';
-import {Check, Minus, Plus, Square, Trash} from 'lucide-react-native';
-import colors from '../../helper/colors';
-import {Button} from '../../ui-components/button/button.component';
-import {useModal} from '../../ui-components/modal/modal.hook';
-import {ConfirmationModalize} from '../../ui-components/modal/confirmatin-modalize.component';
 import Illustration from '../../assets/icons/Illustration.svg';
-import {RootNavigationProps} from '../../navigation/navigation.types';
+import AuthContext from '../../contexts/AuthContext';
+import colors from '../../helper/colors';
+import { RootNavigationProps } from '../../navigation/navigation.types';
+import { Button } from '../../ui-components/button/button.component';
+import { Header } from '../../ui-components/header/header.component';
+import { ConfirmationModalize } from '../../ui-components/modal/confirmatin-modalize.component';
+import { useModal } from '../../ui-components/modal/modal.hook';
+import styles from './cart.style';
 
 const Cart = ({navigation}: RootNavigationProps<'Cart'>) => {
   const {cart, setCart} = useContext(AuthContext);

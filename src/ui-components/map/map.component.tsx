@@ -35,11 +35,11 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
 
   // Устанавливаем начальное состояние формы
   const [formData, setFormData] = useState({
-    country: existingAddress?.country || '',
-    city: existingAddress?.city || '',
-    street: existingAddress?.street || '',
-    latitude: existingAddress?.latitude || null,
-    longitude: existingAddress?.longitude || null,
+    country: existingAddress?.country || 'Таджикистан',
+    city: existingAddress?.city || 'Душанбе',
+    street: existingAddress?.street || 'Абдулахад',
+    latitude: existingAddress?.latitude || '38.5598',
+    longitude: existingAddress?.longitude || '68.7870',
     entrance: existingAddress?.entrance || '',
     floor: existingAddress?.floor || '',
     apartment: existingAddress?.apartment || '',

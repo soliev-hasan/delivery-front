@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   View,
 } from 'react-native';
@@ -47,7 +46,7 @@ const Payment = ({navigation, route}: RootNavigationProps<'Payment'>) => {
       setLoading(false);
       navigation.navigate('BottomTab');
       if (response.status === 200) {
-        console.log('Order sent successfully:', response.data);
+        // console.log('Order sent successfully:', response.data);
       } else {
         console.log('Failed to send order:', response.data.error);
       }
@@ -67,7 +66,6 @@ const Payment = ({navigation, route}: RootNavigationProps<'Payment'>) => {
       .then(res => setOrder(res.data))
       .finally(() => setLoading(false));
   }, [token]);
-  console.log('order', order);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -106,7 +104,7 @@ const Payment = ({navigation, route}: RootNavigationProps<'Payment'>) => {
                 <View style={styles.row}>
                   <Text style={styles.total}>Цена доставки </Text>
                   <Text style={styles.price}>
-                    {parseInt(totalPrice - order.details.deliveryAmount)} c
+                    {parseInt(order.details.deliveryAmount)} c
                   </Text>
                 </View>
                 <View style={styles.row}>
@@ -118,7 +116,7 @@ const Payment = ({navigation, route}: RootNavigationProps<'Payment'>) => {
                 <View style={styles.row}>
                   <Text style={styles.total}>Итог </Text>
                   <Text style={styles.price}>
-                    {parseInt(order.details.deliveryAmount)} c
+                    {parseInt(order.details.total)} c
                   </Text>
                 </View>
               </>
