@@ -11,6 +11,7 @@ export type ScreensParams = {
   Cart: undefined;
   EditProfile: {
     newUser?: boolean;
+    phone?: any;
   };
   Map: undefined;
   ProductDetail: {
@@ -26,6 +27,9 @@ export type ScreensParams = {
     totalPrice: any;
   };
   MyOrders: undefined;
+  DetailOrder: {
+    id: string;
+  };
 };
 
 export type RootRouteProps<RouteName extends keyof ScreensParams> = RouteProp<

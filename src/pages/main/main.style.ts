@@ -106,4 +106,39 @@ export default StyleSheet.create({
   textMenu: {
     color: colors.black,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '90%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+  },
+
+  addressList: {
+    marginBottom: 20,
+  },
+
+  addButton: {
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+  addRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  addressActive: {
+    gap: 10,
+    flexDirection: 'row',
+    marginTop: 15,
+  },
+  emptyText: {
+    textAlign: 'center',
+    color: colors.grayDark,
+  },
 });

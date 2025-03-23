@@ -17,6 +17,7 @@ const useAuth = () => {
     setPhone('');
     setUser(null);
     setToken('');
+    setRefreshToken('');
   }
 
   async function fetch() {

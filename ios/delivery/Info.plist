@@ -2,41 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>GIDClientID</key>
-<string>147215434915-savj2c5bteelk0b9t0v31hm4io3gg31f.apps.googleusercontent.com</string>
-<key>CFBundleURLTypes</key>
-<array>
-  <dict>
-    <key>CFBundleURLSchemes</key>
-    <array>
-      <string>com.googleusercontent.apps.147215434915-savj2c5bteelk0b9t0v31hm4io3gg31f</string>
-    </array>
-  </dict>
-</array>
-<key>NSAppTransportSecurity</key>
-<dict>
-    <key>NSExceptionDomains</key>
-    <dict>
-        <key>89.104.68.128</key>
-        <dict>
-            <key>NSExceptionAllowsInsecureHTTPLoads</key>
-            <true/>
-            <key>NSIncludesSubdomains</key>
-            <true/>
-        </dict>
-    </dict>
-</dict>
-
-<key>NSPhotoLibraryUsageDescription</key>
-<string>Приложение требует доступ к вашей библиотеке фотографий.</string>
-<key>NSCameraUsageDescription</key>
-<string>Приложение требует доступ к камере для съёмки фотографий.</string>
-<key>NSPhotoLibraryAddUsageDescription</key>
-<string>Приложение требует разрешение на сохранение фотографий в библиотеке.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>delivery</string>
+	<string>Шамол</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -51,21 +20,36 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.147215434915-savj2c5bteelk0b9t0v31hm4io3gg31f</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>GIDClientID</key>
+	<string>147215434915-savj2c5bteelk0b9t0v31hm4io3gg31f.apps.googleusercontent.com</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	  <!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-
+	<key>NSCameraUsageDescription</key>
+	<string>Приложение требует доступ к камере для съёмки фотографий.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Приложение требует разрешение на сохранение фотографий в библиотеке.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Приложение требует доступ к вашей библиотеке фотографий.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

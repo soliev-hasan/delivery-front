@@ -15,6 +15,7 @@ export default StyleSheet.create({
     height: 40,
 
     width: '100%',
+    color: colors.black,
   },
   input: {
     fontSize: 16,

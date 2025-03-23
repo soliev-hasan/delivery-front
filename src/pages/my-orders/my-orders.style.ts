@@ -36,8 +36,7 @@ export default StyleSheet.create({
   track: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginLeft: 8,
-    color: '#4CAF50',
+    color: colors.red,
   },
   info: {
     fontSize: 14,
@@ -70,6 +69,6 @@ export default StyleSheet.create({
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#333',
+    color: colors.main,
   },
 });

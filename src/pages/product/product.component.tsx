@@ -64,6 +64,7 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
       console.error('Failed to save cart to AsyncStorage', error);
     }
   };
+
   const getProduct = async (id: string) => {
     Promise.all([
       sendRequest('get', `product/${id}`).then(response =>
@@ -97,8 +98,6 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
   useEffect(() => {
     getProduct(route.params.product._id);
   }, [token]);
-
-  
 
   return (
     <SafeAreaView style={styles.container}>

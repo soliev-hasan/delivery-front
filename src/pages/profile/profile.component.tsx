@@ -11,7 +11,16 @@ import styles from './profile.style';
 import {Header} from '../../ui-components/header/header.component';
 import SVGCamera from '../../assets/icons/camera.svg';
 import SVGSettings from '../../assets/icons/settings.svg';
-import {ChevronRight, LogOut, User} from 'lucide-react-native';
+import {
+  ChevronRight,
+  HelpCircle,
+  Info,
+  LogOut,
+  Package,
+  Phone,
+  Settings,
+  User,
+} from 'lucide-react-native';
 import colors from '../../helper/colors';
 import AuthContext from '../../contexts/AuthContext';
 import FastImage from 'react-native-fast-image';
@@ -29,27 +38,37 @@ const Profile = ({navigation}: RootNavigationProps<'Profile'>) => {
     {
       id: 1,
       name: 'Настройки',
-      icon: SVGSettings,
+      icon: <Settings strokeWidth={2} size={25} color={colors.black} />,
       onPress: () => navigation.navigate('EditProfile', {newUser: false}),
     },
     {
       id: 2,
       name: 'Профиль',
-      icon: SVGSettings,
+      icon: <User strokeWidth={2} size={25} color={colors.black} />,
       onPress: () => console.log('Профиль'),
     },
     {
       id: 3,
       name: 'Мои заказы',
-      icon: SVGSettings,
+      icon: <Package strokeWidth={2} size={25} color={colors.black} />,
       onPress: () => navigation.navigate('MyOrders'),
     },
-    {id: 4, name: 'Помощь', icon: SVGSettings, onPress: () => console.log('')},
-    {id: 5, name: 'О нас', icon: SVGSettings, onPress: () => console.log('')},
+    {
+      id: 4,
+      name: 'Помощь',
+      icon: <HelpCircle strokeWidth={2} size={25} color={colors.black} />,
+      onPress: () => console.log(''),
+    },
+    {
+      id: 5,
+      name: 'О нас',
+      icon: <Info strokeWidth={2} size={25} color={colors.black} />,
+      onPress: () => console.log(''),
+    },
     {
       id: 6,
       name: 'Контакты',
-      icon: SVGSettings,
+      icon: <Phone strokeWidth={2} size={25} color={colors.black} />,
       onPress: () => console.log(''),
     },
   ];
@@ -93,9 +112,7 @@ const Profile = ({navigation}: RootNavigationProps<'Profile'>) => {
               style={styles.iconRow}
               onPress={option.onPress}>
               <View style={styles.iconInfo}>
-                <View style={styles.iconContainer}>
-                  <option.icon width={35} height={35} />
-                </View>
+                <View style={styles.iconContainer}>{option.icon}</View>
                 <Text style={styles.iconName}>{option.name}</Text>
               </View>
               <ChevronRight size={25} />

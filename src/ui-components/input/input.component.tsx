@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, {ReactElement, useState} from 'react';
 import {
   Text,
   TextInput,
@@ -8,9 +8,10 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { Eye, EyeOff, Search, SlidersHorizontal } from 'lucide-react-native';
+import {Eye, EyeOff, Search, SlidersHorizontal} from 'lucide-react-native';
 import styles from './input.style';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import colors from '../../helper/colors';
 
 export const Input = ({
   wrapperStyle,
@@ -80,20 +81,25 @@ export const Input = ({
         {...node}
         autoCapitalize="none"
         secureTextEntry={type === 'password' && !isPasswordVisible}
-        style={[{ ...styles.input, ...inputStyles }]}
+        style={[{...styles.input, ...inputStyles}]}
         ref={inputRef}
         onFocus={() => setInputFocused(true)}
         onBlur={() => setInputFocused(false)}
         onSubmitEditing={onPressSearch}
+        placeholderTextColor={colors.gray}
       />
       {showIcon && type === 'search' ? (
         <TouchableOpacity onPress={onPressSearch}>
-          <Search style={{ marginRight: 5 }} size={iconSize} color="#b3b3b3" />
+          <Search style={{marginRight: 5}} size={iconSize} color="#b3b3b3" />
         </TouchableOpacity>
       ) : null}
       {filterIcon ? (
         <TouchableOpacity onPress={onPressFilter}>
-          <SlidersHorizontal style={{ marginRight: 5 }} size={iconSize} color="#b3b3b3" />
+          <SlidersHorizontal
+            style={{marginRight: 5}}
+            size={iconSize}
+            color="#b3b3b3"
+          />
         </TouchableOpacity>
       ) : null}
       {type === 'password' && isInputFocused ? (

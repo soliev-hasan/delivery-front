@@ -60,7 +60,9 @@ const Otp = ({navigation}: RootNavigationProps<'Otp'>) => {
         await AsyncStorage.setItem('token', data.data.token);
 
         if (result.data.userExist === false) {
-          navigation.navigate('EditProfile', {newUser: true});
+          setTimeout(() => {
+            navigation.navigate('EditProfile', {newUser: true, phone: phone});
+          }, 1000);
         } else {
           navigation.navigate('BottomTab');
         }

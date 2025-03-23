@@ -14,7 +14,7 @@ import {ALERT_TYPE, Dialog, Toast} from 'react-native-alert-notification';
 import AuthContext from '../../contexts/AuthContext';
 import {RootNavigationProps} from '../../navigation/navigation.types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import * as amplitude from '@amplitude/analytics-react-native';
 const SingUp = ({navigation}: RootNavigationProps<'SignUp'>) => {
   const webClientId =
     '147215434915-99vsopuod3ek3hsl99jee5a9b1q9biil.apps.googleusercontent.com';
@@ -23,6 +23,7 @@ const SingUp = ({navigation}: RootNavigationProps<'SignUp'>) => {
     useContext(AuthContext);
   const {sendRequest, loading, error, data} = useApiRequest();
   async function sendOtp() {
+    amplitude.track('Sign Up');
     try {
       const result = await sendRequest('post', 'auth/send-otp', {
         phone: `+992${phone}`,

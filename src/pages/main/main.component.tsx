@@ -3,7 +3,10 @@ import {
   ActivityIndicator,
   FlatList,
   ImageBackground,
+  Keyboard,
+  Modal,
   Text,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -37,7 +40,7 @@ import {Modalize} from 'react-native-modalize';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import cartActions from '../../store/cart/actions';
-
+import messaging from '@react-native-firebase/messaging';
 const Main = ({navigation}: RootNavigationProps<'Main'>) => {
   const {sendRequest} = useApiRequest();
   const {setUser, user, token, refreshToken, setCart, setAddress, address} =
@@ -46,9 +49,8 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
   const categories = useSelector(categoriesSelectors.allCategories);
   const modal = useModal();
   const [visible, setVisible] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState();
   const [loadingAddressId, setLoadingAddressId] = useState(null);
-  const ref = useRef();
+  const [pushToken, setPushToken] = useState('none');
 
   const deleteAdress = async item => {
     if (!item) return;
@@ -57,6 +59,17 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
     try {
       const response = await sendRequest('delete', `user/address/${item._id}`);
       if (response.status === 200) {
+        if (address._id === item._id) {
+          await AsyncStorage.removeItem('address');
+          setAddress(null);
+        } else {
+          await AsyncStorage.setItem(
+            'address',
+            JSON.stringify(response.data.user.address[0]),
+          );
+          setAddress(response.data.user.address[0]);
+        }
+
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
           title: 'Успешно',
@@ -82,24 +95,33 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
       console.error('Failed to fetch cart from AsyncStorage', error);
     }
   };
+  const fetchToken = async () => {
+    await messaging().registerDeviceForRemoteMessages();
+    const token = await messaging().getToken();
+    if (token) {
+      setPushToken(token);
+    }
+  };
 
   useEffect(() => {
     fetchCart();
+    fetchToken();
     Promise.all([
       sendRequest('get', 'user/me').then(response =>
         setUser(response.data.user),
       ),
-      sendRequest('get', '/category/structured/')
-        .then(response =>
-          dispatch(categoriesActions.saveCategories(response.data.categories)),
-        )
-
-        .catch(e => console.log()),
+      sendRequest('get', '/category/structured/').then(response =>
+        dispatch(categoriesActions.saveCategories(response.data.categories)),
+      ),
+      sendRequest('post', 'user/fcm-token', {fcmToken: pushToken}).catch(e =>
+        console.log(),
+      ),
     ]);
   }, [token]);
 
   const fetchAddress = async () => {
     const address = await AsyncStorage.getItem('address');
+
     if (address !== null) {
       setAddress(JSON.parse(address));
     } else {
@@ -118,7 +140,7 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView style={{flex: 1}}>
         <ImageBackground
           source={{
             uri: 'https://www.sterevan.ru/images/catalog/3fa4080579377c5e94c125fd0b124106.jpg',
@@ -126,11 +148,29 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
           style={styles.header}>
           <View style={styles.overlay} />
           <TouchableOpacity
-            onPress={() => ref.current.open()}
+            hitSlop={{
+              top: 100,
+              bottom: 100,
+              left: 100,
+              right: 100,
+            }}
+            onPress={() => setVisible(true)}
             style={styles.adress}>
-            <Text style={styles.text}>Ваш адрес</Text>
+            <Text onPress={() => setVisible(true)} style={styles.text}>
+              Ваш адрес
+            </Text>
             <ChevronDown color={colors.white} />
           </TouchableOpacity>
+          {address && (
+            <View style={styles.addressActive}>
+              <MapPin color={colors.white} />
+              <Text style={styles.text}>
+                {address && address.country}
+                {','}
+              </Text>
+              <Text style={styles.text}>{address && address.city}</Text>
+            </View>
+          )}
         </ImageBackground>
 
         <View style={styles.categories}>
@@ -147,78 +187,80 @@ const Main = ({navigation}: RootNavigationProps<'Main'>) => {
           )}
         </View>
       </ScrollView>
-
       {/* Modal address */}
-      <Modalize
-        ref={ref}
-        modalHeight={350}
-        handleStyle={{backgroundColor: 'white'}}
-        modalStyle={{
-          borderTopLeftRadius: 0,
-          borderTopRightRadius: 0,
-        }}
-        withOverlay={true}>
-        <View>
-          <Text style={styles.title}>Мои адреса</Text>
-          <View style={styles.address}>
-            {user &&
-              user.address.map(item => (
-                <TouchableOpacity
-                  onPress={() => handleSelectAddress(item)}
-                  style={styles.row}>
-                  <TouchableOpacity>
-                    {address._id === item._id ? (
-                      <View style={styles.rowMenu}>
-                        <CircleDot />
-                      </View>
-                    ) : (
-                      <View style={styles.rowMenu}>
-                        <Circle />
-                      </View>
-                    )}
-                  </TouchableOpacity>
-                  {/* {address._id === item._id && <Check />} */}
 
-                  <View>
-                    <Text numberOfLines={2} style={styles.street}>
-                      {item.city}, {item.street}
+      <Modal
+        visible={visible}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setVisible(false)}>
+        <TouchableWithoutFeedback onPress={() => setVisible(false)}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={styles.modalContent}>
+                <Text style={styles.title}>Мои адреса</Text>
+                <View style={styles.addressList}>
+                  {Array.isArray(user?.address) && user.address.length > 0 ? (
+                    user.address.map(item => (
+                      <TouchableOpacity
+                        key={item._id}
+                        onPress={() => handleSelectAddress(item)}
+                        style={styles.row}>
+                        {address && address._id === item._id ? (
+                          <CircleDot />
+                        ) : (
+                          <Circle />
+                        )}
+                        <View>
+                          <Text numberOfLines={2} style={styles.street}>
+                            {item.city}, {item.street}
+                          </Text>
+                          <Text style={styles.second}>
+                            кв {item.apartment} подъезд {item.entrance} этаж{' '}
+                            {item.floor}
+                          </Text>
+                        </View>
+                        <TouchableOpacity onPress={() => deleteAdress(item)}>
+                          {loadingAddressId === item._id ? (
+                            <ActivityIndicator
+                              size="small"
+                              color={colors.black}
+                            />
+                          ) : (
+                            <Trash style={{marginTop: -5}} size={20} />
+                          )}
+                        </TouchableOpacity>
+                      </TouchableOpacity>
+                    ))
+                  ) : (
+                    <Text style={styles.emptyText}>
+                      Нет сохраненных адресов
                     </Text>
-                    <Text style={styles.second}>
-                      кв {item.apartment} подъезд {item.entrance} этаж{' '}
-                      {item.floor}
+                  )}
+                </View>
+                <TouchableOpacity
+                  style={styles.addButton}
+                  onPress={() => {
+                    navigation.navigate('Map');
+                    setVisible(false);
+                  }}>
+                  <View style={styles.addRow}>
+                    <Plus strokeWidth={2} color={colors.black} />
+                    <Text
+                      onPress={() => {
+                        navigation.navigate('Map');
+                        setVisible(false);
+                      }}
+                      style={[styles.text, {color: colors.black}]}>
+                      Добавить новый адрес
                     </Text>
                   </View>
-                  <TouchableOpacity onPress={() => deleteAdress(item)}>
-                    {loadingAddressId === item._id ? (
-                      <ActivityIndicator size="small" color={colors.black} />
-                    ) : (
-                      <Trash style={{marginTop: -5}} size={20} />
-                    )}
-                  </TouchableOpacity>
                 </TouchableOpacity>
-              ))}
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-
-          <Button
-            style={{
-              marginTop: 20,
-              backgroundColor: 'transparent',
-              marginLeft: 20,
-            }}
-            onPress={() => {
-              navigation.navigate('Map');
-              modal.close();
-            }}
-            disabled={true}>
-            <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-              <Plus strokeWidth={2} color={colors.black} />
-              <Text style={[styles.text, {color: colors.black}]}>
-                Добавить новый адрес
-              </Text>
-            </View>
-          </Button>
-        </View>
-      </Modalize>
+        </TouchableWithoutFeedback>
+      </Modal>
     </SafeAreaView>
   );
 };

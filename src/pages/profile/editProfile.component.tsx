@@ -154,9 +154,9 @@ const EditProfile = ({
           <View style={styles.inputRow}>
             <Text style={styles.inputLabel}>Номер</Text>
             <Input
-              editable={newUser ? true : false}
+              editable={false}
               value={phone ? phone : phoneNumber}
-              showCountryCode={newUser ? true : false}
+              showCountryCode={false}
               maxLength={13}
               onChangeText={(text: string) => setPhone(text)}
             />

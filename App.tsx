@@ -13,6 +13,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {ModalProvider} from './src/ui-components/modal/modal.provider';
 import messaging from '@react-native-firebase/messaging';
+import * as Sentry from '@sentry/react-native';
+import * as amplitude from '@amplitude/analytics-react-native';
+let ExportedApp;
+
+if (!__DEV__) {
+  ExportedApp = Sentry.wrap(App);
+  Sentry.init({
+    dsn: 'https://d68b1bfd1800a27ac2f983c362bbf280@o4508727914528768.ingest.us.sentry.io/4508727916429312',
+    replaysSessionSampleRate: 1.0,
+    replaysOnErrorSampleRate: 1.0,
+    integrations: [
+      Sentry.mobileReplayIntegration({
+        maskAllText: false,
+        maskAllImages: false,
+        maskAllVectors: false,
+      }),
+    ],
+  });
+} else {
+  ExportedApp = App;
+}
+amplitude.init('221c944099632c13b8df7fe2a24d6125');
 
 function App() {
   async function requestUserPermission() {
@@ -85,4 +107,4 @@ function App() {
   );
 }
 
-export default App;
+export default ExportedApp;

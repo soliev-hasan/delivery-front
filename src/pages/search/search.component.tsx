@@ -63,10 +63,10 @@ const Search = ({navigation}: RootNavigationProps<'Main'>) => {
         style={styles.productItem}
         activeOpacity={0.8}>
         <Image
-          // source={{uri: `${BASE_URL}${item.photos[0]}`}}
-          source={{
-            uri: 'https://chefrestoran.ru/wp-content/uploads/2018/10/309014621.jpg',
-          }}
+          source={{uri: `${BASE_URL}${item.photos[0]}`}}
+          // source={{
+          //   uri: 'https://chefrestoran.ru/wp-content/uploads/2018/10/309014621.jpg',
+          // }}
           style={styles.productImage}
           resizeMode="cover"
         />
@@ -114,6 +114,7 @@ const Search = ({navigation}: RootNavigationProps<'Main'>) => {
           onPressSearch={searchProduct}
           filterIcon={searchExecuted && products.length > 0}
           onFilterIconPress={() => ref.current.open()}
+          placeholderTextColor={colors.gray}
         />
       </View>
       {loading && <ActivityIndicator color={colors.main} size={'large'} />}

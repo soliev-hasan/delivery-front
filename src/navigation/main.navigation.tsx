@@ -10,6 +10,7 @@ import ProductDetail from '../pages/product/product.component';
 import SubCategory from '../pages/subcategory/subcategory.component';
 import Payment from '../pages/payment/payment.component';
 import MyOrders from '../pages/my-orders/my-orders.component';
+import DetailOrder from '../pages/my-orders/detail-order.component';
 
 const MainNavigation = () => {
   const Stack = createNativeStackNavigator<ScreensParams>();
@@ -57,6 +58,11 @@ const MainNavigation = () => {
       <Stack.Screen
         name="MyOrders"
         component={MyOrders}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DetailOrder"
+        component={DetailOrder}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

@@ -1,23 +1,23 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Check, Minus, Plus, Trash } from 'lucide-react-native';
-import React, { useContext, useState } from 'react';
+import {Check, Minus, Plus, Trash} from 'lucide-react-native';
+import React, {useContext, useState} from 'react';
 import {
   Alert,
   FlatList,
   SafeAreaView,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Illustration from '../../assets/icons/Illustration.svg';
 import AuthContext from '../../contexts/AuthContext';
 import colors from '../../helper/colors';
-import { RootNavigationProps } from '../../navigation/navigation.types';
-import { Button } from '../../ui-components/button/button.component';
-import { Header } from '../../ui-components/header/header.component';
-import { ConfirmationModalize } from '../../ui-components/modal/confirmatin-modalize.component';
-import { useModal } from '../../ui-components/modal/modal.hook';
+import {RootNavigationProps} from '../../navigation/navigation.types';
+import {Button} from '../../ui-components/button/button.component';
+import {Header} from '../../ui-components/header/header.component';
+import {ConfirmationModalize} from '../../ui-components/modal/confirmatin-modalize.component';
+import {useModal} from '../../ui-components/modal/modal.hook';
 import styles from './cart.style';
 
 const Cart = ({navigation}: RootNavigationProps<'Cart'>) => {
@@ -50,6 +50,14 @@ const Cart = ({navigation}: RootNavigationProps<'Cart'>) => {
 
   const removeItem = index => {
     const updatedCart = cart.filter((_, i) => i !== index);
+
+    // Убираем товар из выбранных
+    const updatedSelectedItems = selectedItems.filter(i => i !== index);
+    const updatedTotal = total.filter(item => item._id !== cart[index]._id);
+
+    setSelectedItems(updatedSelectedItems);
+    setTotal(updatedTotal);
+
     saveCart(updatedCart);
   };
 

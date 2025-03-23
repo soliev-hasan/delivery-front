@@ -182,11 +182,13 @@ const SubCategory = ({route}: RootNavigationProps<'SubCategory'>) => {
   const handleChapterPress = chapterId => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setActiveChapterId(chapterId);
+
     const sectionIndex = structuredData.findIndex(
       sec => sec.chapterId === chapterId,
     );
+
     if (sectionIndex >= 0 && sectionListRef.current) {
-      sectionListRef.current.scrollToLocation({
+      sectionListRef.current?.scrollToLocation({
         sectionIndex,
         itemIndex: 0,
         animated: true,
@@ -216,7 +218,7 @@ const SubCategory = ({route}: RootNavigationProps<'SubCategory'>) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header backIcon title={title} />
       {structuredData.length > 0 && (
         <View style={localStyles.chaptersContainer}>
@@ -241,14 +243,20 @@ const SubCategory = ({route}: RootNavigationProps<'SubCategory'>) => {
           }
           renderSectionHeader={renderSectionHeader}
           renderItem={renderSectionItem}
+          getItemLayout={(data, index) => ({
+            length: 200, // Примерная высота одного элемента
+            offset: 200 * index,
+            index,
+          })}
           contentContainerStyle={{paddingHorizontal: 10, paddingVertical: 10}}
+          keyboardShouldPersistTaps="handled"
         />
       ) : (
         <View style={styles.spinner}>
           <ActivityIndicator size={'large'} color={colors.main} />
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -276,6 +284,7 @@ const localStyles = StyleSheet.create({
   chapterHeaderContainer: {
     backgroundColor: '#fff',
     paddingVertical: 10,
+    marginLeft: 10,
   },
   chapterHeaderText: {
     fontSize: 18,

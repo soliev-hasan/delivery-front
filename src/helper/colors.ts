@@ -15,5 +15,7 @@ export default {
   green: 'green',
   yellow: '#FFF000',
   yellowLight: '#F8E7AD',
-  main: '#FE8C00',
+  main: 'red',
+
+  // main: '#FE8C00',
 };

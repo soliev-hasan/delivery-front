@@ -5,7 +5,9 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 16,
+    paddingTop: 50,
+
+    // padding: 16,
   },
   header: {
     fontSize: 24,

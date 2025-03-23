@@ -35,6 +35,13 @@ export default StyleSheet.create({
   },
   productInfo: {
     paddingVertical: 15,
+    backgroundColor: colors.white,
+    paddingHorizontal: 15,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  header: {
+    paddingHorizontal: 5,
   },
   productName: {
     fontSize: 26,

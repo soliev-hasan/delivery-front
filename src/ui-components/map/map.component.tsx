@@ -116,7 +116,6 @@ const Map = ({navigation, route}: RootNavigationProps<'Map'>) => {
           });
           setUser(response.data.user);
           navigation.goBack();
-          console.log(response.data);
         }
       } else {
         axios
