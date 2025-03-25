@@ -79,7 +79,7 @@ export const useApiRequest = () => {
               const newToken = refreshResponse.data.token;
               const newRefreshToken = refreshResponse.data.refreshToken;
 
-              await AsyncStorage.setItem('token', newToken);
+              await AsyncStorage.setItem('token', newToken);              
               await AsyncStorage.setItem('refreshToken', newRefreshToken);
               setToken(newToken);
               setRefreshToken(newRefreshToken);

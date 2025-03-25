@@ -67,7 +67,7 @@ const ProductDetail = ({route}: RootNavigationProps<'ProductDetail'>) => {
 
   const getProduct = async (id: string) => {
     Promise.all([
-      sendRequest('get', `product/${id}`).then(response =>
+      sendRequest('get', `product/one/${id}`).then(response =>
         setProduct(response.data.product),
       ),
       sendRequest('get', `product/${id}/similar`).then(response =>

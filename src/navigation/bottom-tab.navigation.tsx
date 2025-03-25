@@ -20,6 +20,7 @@ import {useSelector} from 'react-redux';
 import cartSelectors from '../store/cart/selectors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthContext from '../contexts/AuthContext';
+import Test from '../test.component';
 const BottomTab = createBottomTabNavigator<ScreensParams>();
 
 const BottomTabNavigation = () => {
