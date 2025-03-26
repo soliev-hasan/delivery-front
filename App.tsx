@@ -87,7 +87,7 @@ function App() {
         );
 
         if (navigationRef.isReady()) {
-          navigationRef.navigate('DetailOrder', {orderId});
+          navigationRef.navigate('DetailOrder', {id: orderId});
         }
       } else {
         console.log('orderId не найден в уведомлении');
